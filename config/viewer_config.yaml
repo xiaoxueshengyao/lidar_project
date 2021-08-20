@@ -1,0 +1,20 @@
+data_path:./ #数据存放路径
+
+#全局地图
+global_map_filter:voxel_filter 
+
+#局部地图
+local_frame_num:20
+local_map_filter:voxel_filter
+
+#当前帧
+frame_filter:voxel_filter
+
+#滤波参数
+voxel_filter:
+  global_map:
+    leaf_size:[0.5,0.5,0.5]
+  local_map:
+    leaf_size:[0.5,0.5,0.5]
+  frame:
+    leaf_size:[0.5,0.5,0.5]

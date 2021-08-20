@@ -1,0 +1,6 @@
+<launch>
+  <node pkg="lidar_project" type="test_data" name="test_data" output="screen"></node>
+  
+  <!--node pkg="tf" type="static_transform_publisher" name="map_bro" args="0 0 0 0 0 0 1 map world 100"/-->
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find lidar_project)/launch/test_frame.rviz"></node>
+</launch>

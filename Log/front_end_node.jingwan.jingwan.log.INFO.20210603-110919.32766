@@ -1,0 +1,12 @@
+Log file created at: 2021/06/03 11:09:19
+Running on machine: jingwan
+Running duration (h:mm:ss): 0:00:00
+Log line format: [IWEF]yyyymmdd hh:mm:ss.uuuuuu threadid file:line] msg
+I20210603 11:09:19.234755 32766 front_end.cpp:65] Point cloud map will saved in /home/jingwan/lslidar_ws/src/lidar_project/slam_data
+I20210603 11:09:19.234985 32766 front_end.cpp:74] Key Frame point cloud map will saved in /home/jingwan/lslidar_ws/src/lidar_project/slam_data/key_frame
+I20210603 11:09:19.234998 32766 front_end.cpp:85] The registration method is NDT
+I20210603 11:09:19.235107 32766 ndt_registration.cpp:28] NDT parameters: 
+resolution: 1, step size: 0.1, transformation epsilon0.01, 
+I20210603 11:09:19.235141 32766 front_end.cpp:102] local_mapThe choosen filter method is voxel_filter
+I20210603 11:09:19.235181 32766 front_end.cpp:102] frameThe choosen filter method is voxel_filter
+I20210603 11:09:19.235208 32766 front_end.cpp:102] displayThe choosen filter method is voxel_filter
