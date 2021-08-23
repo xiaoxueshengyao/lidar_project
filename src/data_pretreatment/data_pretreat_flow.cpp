@@ -32,17 +32,17 @@ DataPretreatFlow::DataPretreatFlow(ros::NodeHandle& nh){
 
 }
 
-
+//数据预处理运行流程
 bool DataPretreatFlow::Run(){
-    if(!ReadData())  return false;
-    if(!InitCalibration())  return false;
-    if(!InitGNSS())  return false;
+    if(!ReadData())  return false;                     //读取数据
+    if(!InitCalibration())  return false;           //得到lidar到imu的转换
+    if(!InitGNSS())  return false;                      //初始化GNSS数据
 
     while (HasData())
     {
-        if(!ValidData())   continue;
+        if(!ValidData())   continue;                    //验证数据有效性
 
-        TransformData();
+        DataPretreatFlow::TransformData();
         PublishData();
     }
 
@@ -58,6 +58,7 @@ bool DataPretreatFlow::ReadData(){
     static std::deque<GNSSData> unsynced_gnss_;
     static std::deque<VelocityData> unsynced_velocity_;
     
+    //数据存储到队列中
     gnss_sub_ptr_->ParasData(unsynced_gnss_);
     imu_sub_ptr_->ParasData(unsynced_imu_);   
     velocity_sub_ptr_->ParaData(unsynced_velocity_);
@@ -66,6 +67,7 @@ bool DataPretreatFlow::ReadData(){
     if(cloud_data_buff_.size() == 0)  
         return false;
 
+    //以点云数据的时间作为基准，对其他数据进行同步
     double cloud_time = cloud_data_buff_.front().time;
     bool valid_gnss = GNSSData::SyncData(unsynced_gnss_,gnss_data_buff_,cloud_time); 
     bool valid_imu = IMUData::SyncData(unsynced_imu_,imu_data_buff_,cloud_time);
