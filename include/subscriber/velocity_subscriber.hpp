@@ -11,7 +11,7 @@ namespace lidar_project{
 
 class VelocitySubscriber{
   public:
-    VelocitySubscriber(ros::NodeHandle& nh, std::string topic_name,size_t buff_size);
+    VelocitySubscriber(ros::NodeHandle& nh, std::string topic_name,size_t buff_size);//数据订阅
     VelocitySubscriber() = default;
     void ParaData(std::deque<VelocityData>& deque_velocity_data);
 

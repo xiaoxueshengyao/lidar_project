@@ -42,15 +42,15 @@ bool DataPretreatFlow::Run(){
     {
         if(!ValidData())   continue;                    //验证数据有效性
 
-        DataPretreatFlow::TransformData();
-        PublishData();
+        TransformsData();                                   //坐标系转换
+        PublishData();                                           //数据发布
     }
 
     return true;
     
 }
 
-//订阅的数据进行处理，进行同步先
+//订阅的数据进行处理，先进行同步
 bool DataPretreatFlow::ReadData(){
     cloud_sub_ptr_->ParaData(cloud_data_buff_);
 
@@ -170,7 +170,7 @@ bool DataPretreatFlow::ValidData(){
 
 //GNSS数据转换为笛卡尔坐标系，速度信息转换到雷达，按理说要用imu的速度，
 //但是这里用的gnss的数据，另外对点云进行畸变矫正
-bool DataPretreatFlow::TransformData(){
+bool DataPretreatFlow::TransformsData(){
     gnss_pose_ = Eigen::Matrix4f::Identity();
 
     current_gnss_data_.UpdateXYZ();//转换为xyz

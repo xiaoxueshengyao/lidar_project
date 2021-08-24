@@ -47,7 +47,7 @@ bool GNSSData::SyncData(std::deque<GNSSData>& UnsyncedData,std::deque<GNSSData>&
             // std::cout<<"---------"<<std::fixed<<UnsyncedData.at(0).time<<std::endl;
             std::cout<<"---------"<<std::fixed<<UnsyncedData.at(1).time<<std::endl;
             UnsyncedData.pop_front();
-            continue;//这里会出现死循环
+            continue;//这里偶尔会出现死循环
         if(sync_time - UnsyncedData.front().time > 0.2){
             UnsyncedData.pop_front();
             // std::cout<<"222222"<<std::endl;
@@ -64,6 +64,7 @@ bool GNSSData::SyncData(std::deque<GNSSData>& UnsyncedData,std::deque<GNSSData>&
     if(UnsyncedData.size() < 2)  
         return false;
 
+    //前后两个比例系数
     GNSSData front_data = UnsyncedData.at(0);
     GNSSData back_data = UnsyncedData.at(1);
     GNSSData synced_data;

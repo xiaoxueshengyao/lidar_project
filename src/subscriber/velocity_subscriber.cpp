@@ -6,6 +6,7 @@ VelocitySubscriber::VelocitySubscriber(ros::NodeHandle& nh, std::string topic_na
     subscriber_ = nh_.subscribe(topic_name,buff_size,&VelocitySubscriber::msg_callback,this);
 }
 
+//速度数据简单获取，放到速度对象对应数据量中
 void VelocitySubscriber::msg_callback(const geometry_msgs::TwistStampedConstPtr& twist_msg_ptr){
     VelocityData velocity_data;
     velocity_data.time = twist_msg_ptr->header.stamp.toSec();

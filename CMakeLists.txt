@@ -47,7 +47,7 @@ if(GLOG_FOUND)
 endif()
 
 #地理信息坐标
-find_package(GeographicLib)#需要安装对应的库
+find_package(GeographicLib REQUIRED)#需要安装对应的库
 include_directories(${Geographic_INCLUDE_DIRS})
 
 find_package(PkgConfig REQUIRED)

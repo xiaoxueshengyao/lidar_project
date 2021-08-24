@@ -24,7 +24,8 @@ void GNSSSubscriber::msg_callback(const sensor_msgs::NavSatFixConstPtr& gnss_msg
 
 }
 
-void GNSSSubscriber::ParasData(std::deque<GNSSData>& deque_gnss_data){//像这些相同功能不同参数的可以用多态来实现，包括上面的msg_callback
+//像这些相同功能不同参数的可以用多态来实现，包括上面的msg_callback
+void GNSSSubscriber::ParasData(std::deque<GNSSData>& deque_gnss_data){
     if(new_gnss_data_.size() > 0){
         deque_gnss_data.insert(deque_gnss_data.end(),new_gnss_data_.begin(),new_gnss_data_.end());
         new_gnss_data_.clear();

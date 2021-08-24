@@ -35,7 +35,7 @@ class DataPretreatFlow{
         bool InitGNSS();
         bool HasData();
         bool ValidData();
-        bool TransformData();
+        bool TransformsData();
         bool PublishData();
 
     private:

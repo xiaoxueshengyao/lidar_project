@@ -107,11 +107,13 @@ int main(int argc,char** argv){
   ros::init(argc,argv,"frame_test");
   ros::NodeHandle nh;
   
+  //话题订阅
   ros::Subscriber pointcloud_sub = nh.subscribe("/kitti/velo/pointcloud",100000,PointcloudCallback);
   ros::Subscriber imu_sub = nh.subscribe("/kitti/oxts/imu",1000000,ImuCallback);
   ros::Subscriber gnss_sub = nh.subscribe("/kitti/oxts/gps/fix",1000000,GnssCallback);
   TFListener lidar_to_imu_tf(nh,"velo_link","imu_link");//最终的转换就是冲lidar->IMU->map
 
+  //话题发布
   ros::Publisher cloud_pub = nh.advertise<sensor_msgs::PointCloud2>("current_scan",100);
   ros::Publisher odometry_pub = nh.advertise<nav_msgs::Odometry>("lidar_odom",100);
   
