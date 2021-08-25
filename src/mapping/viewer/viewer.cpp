@@ -75,7 +75,7 @@ bool Viewer::InitFilter(std::string filter_user,
     
 }
 
-
+//关键帧更新流程
 bool Viewer::Update(std::deque<KeyFrame>& new_key_frames,
                     std::deque<KeyFrame>& optimized_key_frames,
                     PoseData transformed_data,
@@ -113,7 +113,7 @@ void Viewer::ResetParam(){
     has_new_local_map_ = false;
 }
 
-//关键帧位姿更新
+//关键帧位姿优化更新
 bool Viewer::OptimizeKeyFrames(){
     size_t optimized_index = 0;
     size_t all_index = 0;
