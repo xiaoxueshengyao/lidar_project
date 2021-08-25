@@ -22,7 +22,7 @@ Viewer::Viewer(){
 }
 
 bool Viewer::InitWithConfig(){
-    std::string config_file_path = "/home/jingwan/lslidar_ws/src/lidar_project/config/viewer_config.yaml";
+    std::string config_file_path = "/home/jerry/yjj_ws/src/lidar_project/config/viewer_config.yaml";
     YAML::Node config_node = YAML::LoadFile(config_file_path);
 
     InitParam(config_node);
@@ -45,7 +45,7 @@ bool Viewer::InitParam(const YAML::Node& config_node){
 bool Viewer::InitDataPath(const YAML::Node& config_node){
     std::string data_path = config_node["data_path"].as<std::string>();
     if(data_path == "./"){
-        data_path = "/home/jingwan/lslidar_ws/src/lidar_project";
+        data_path = "/home/jerry/yjj_ws/src/lidar_projectt";
     }
     key_frames_path_ = data_path + "/slam_data/key_frames";
     map_path_ = data_path + "/slam_data/map";
