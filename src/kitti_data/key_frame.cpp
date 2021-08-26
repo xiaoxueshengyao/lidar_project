@@ -9,8 +9,8 @@
 
 namespace lidar_project{
 Eigen::Quaternionf KeyFrame::GetQuaternion(){
-    Eigen::Quaternionf q;
-    q = pose.block(0,0,3,3);
+    Eigen::Quaternionf q(pose.block<3,3>(0,0));
+    //q = pose.block(0,0,3,3);
 
     return q;
 }

@@ -5,9 +5,9 @@
 
 #include <ros/ros.h>
 #include "glog/logging.h"
-#include "front_end/front_end_flow.hpp"
+#include "mapping/front_end/front_end_flow.hpp"
 
-#include <lidar_project/saveMap.h>              //ros的服务头文件，不用写出实体，在cmakelists.txt中写出可在build自动生成
+//#include <lidar_project/saveMap.h>              //ros的服务头文件，不用写出实体，在cmakelists.txt中写出可在build自动生成
 
 using namespace lidar_project;
 

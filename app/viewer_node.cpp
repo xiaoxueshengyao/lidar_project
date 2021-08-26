@@ -23,7 +23,7 @@ bool save_map_callback(saveMap::Request& request, saveMap::Response& response){
 
 int main(int argc, char** argv){
     google::InitGoogleLogging(argv[0]);//谷歌的日志文件，日志名
-    FLAGS_log_dir = "/home/jerry/yjj_ws/src/lidar_project/Log";
+    FLAGS_log_dir = "/home/jerry/yjj_ws/src/lidar_project/Log";//记录日志的同时输出到stderr
     FLAGS_alsologtostderr = 1;//Set whether log messages go to stderr in addition to logfiles.
 
     ros::init(argc,argv,"viewer_node");

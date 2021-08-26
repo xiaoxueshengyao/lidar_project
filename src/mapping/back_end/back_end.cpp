@@ -22,7 +22,7 @@ BackEnd::BackEnd(){
 
 //参数文件读取，包括关键帧和优化的执行条件以及轨迹文件路径
 bool BackEnd::InitWithConfig(){
-    std::string config_file_path = "/home/jingwan/lslidar_ws/src/lidar_project/config/BackEndConfig.yaml";
+    std::string config_file_path = "/home/jerry/yjj_ws/src/lidar_project/config/BackEndConfig.yaml";
     YAML::Node config_node = YAML::LoadFile(config_file_path);
 
     InitParam(config_node);
@@ -45,7 +45,7 @@ bool BackEnd::InitParam(const YAML::Node& config_node){
 bool BackEnd::InitDataPath(const YAML::Node& config_node){
     std::string data_path = config_node["data_path"].as<std::string>();
     if(data_path == "./"){
-        data_path = "/home/jingwan/lslidar_ws/src/lidar_project";
+        data_path = "/home/jerry/yjj_ws/src/lidar_project";
     }
 
     if(!FileManager::CreateDirectory(data_path + "/slam_data")){

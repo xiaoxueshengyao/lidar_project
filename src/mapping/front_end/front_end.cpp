@@ -26,7 +26,7 @@ FrontEnd::FrontEnd()
 }
 
 bool FrontEnd::InitWithConfig(){
-    std::string config_file_path = "/home/jingwan/lslidar_ws/src/lidar_project/config/FrontEndConfig.yaml";
+    std::string config_file_path = "/home/jerry/yjj_ws/src/lidar_project/config/FrontEndConfig.yaml";
     YAML::Node config_node = YAML::LoadFile(config_file_path);
 
     InitParam(config_node);

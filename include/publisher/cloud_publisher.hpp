@@ -17,7 +17,7 @@ namespace lidar_project{
 //点云发布
 class CloudPublisher{
     public:
-      CloudPublisher(ros::NodeHandle& nh, std::string topic_name,size_t buff_size,std::string frame_id);
+      CloudPublisher(ros::NodeHandle& nh, std::string topic_name,std::string frame_id,size_t buff_size);
       CloudPublisher() = default;
 
 

@@ -4,8 +4,8 @@ namespace lidar_project{
 
 CloudPublisher::CloudPublisher(ros::NodeHandle& nh, 
                                std::string topic_name,
-                               size_t buff_size,
-                               std::string frame_id)
+                               std::string frame_id,
+                               size_t buff_size)
     :nh_(nh),frame_id_(frame_id){
     publisher_ = nh_.advertise<sensor_msgs::PointCloud2>(topic_name,buff_size);
     

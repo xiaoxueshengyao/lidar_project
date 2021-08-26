@@ -126,7 +126,7 @@ bool Viewer::OptimizeKeyFrames(){
             all_index++;
         }else{//如果优化位姿的index和全局中对应的位姿index对应上了
             //相当于求了同一个位置，优化前后的位姿差
-            pose_to_optimize_ = optimized_key_frames_.at(optimized_index).pose * all_key_frames_.at(all_index).pose.inverse());
+            pose_to_optimize_ = optimized_key_frames_.at(optimized_index).pose * all_key_frames_.at(all_index).pose.inverse();
             all_key_frames_.at(all_index) = optimized_key_frames_.at(optimized_index);
             optimized_index++;
             all_index++;

@@ -104,7 +104,7 @@ int main(int argc,char** argv){
 
   google::InitGoogleLogging(argv[0]);  
   
-  ros::init(argc,argv,"frame_test");
+  ros::init(argc,argv,"test_frame");
   ros::NodeHandle nh;
   
   //话题订阅
@@ -187,19 +187,11 @@ int main(int argc,char** argv){
         odomtry_mat.pose.pose.orientation.z = q.z();
 
         cloud_pub.publish(*cloud_out);
-        odometry_pub.publish(odomtry_mat);
-        
-
-
+        odometry_pub.publish(odomtry_mat);      
       }
-
 
       rate.sleep();
   }
-
-
-
-
 
   return 0;
 }
