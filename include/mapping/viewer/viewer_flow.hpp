@@ -64,7 +64,8 @@ class ViewerFlow{
         CloudData current_cloud_data_;
         PoseData current_transformed_odom_;
 
-
+    public:
+        EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
 };    
 

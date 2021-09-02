@@ -30,7 +30,8 @@ int main(int argc, char** argv){
     ros::NodeHandle nh;
 
     ros::ServiceServer service = nh.advertiseService("save_map",save_map_callback);//订阅服务
-    std::shared_ptr<ViewerFlow> _viewer_flow_ptr = std::make_shared<ViewerFlow>(nh);
+    // std::shared_ptr<ViewerFlow> _viewer_flow_ptr = std::make_shared<ViewerFlow>(nh);
+    std::shared_ptr<ViewerFlow> _viewer_flow_ptr = std::shared_ptr<ViewerFlow>(new ViewerFlow(nh));
 
     ros::Rate rate(100); //频率100Hz
     while(ros::ok()){

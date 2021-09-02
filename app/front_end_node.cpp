@@ -32,7 +32,8 @@ int main(int argc, char** argv){
 
     //ros::ServiceServer service = nh.advertiseService("save_map",save_map_callback);
     //_front_end_flow_ptr = std::make_shared<FrontEndFlow>(nh);
-    std::shared_ptr<FrontEndFlow> front_end_flow_ptr = std::make_shared<FrontEndFlow>(nh);//前端流程对象
+    //std::shared_ptr<FrontEndFlow> front_end_flow_ptr = std::allocate_shared<FrontEndFlow>(Eigen::aligned_allocator<FrontEndFlow>(nh));//前端流程对象
+    std::shared_ptr<FrontEndFlow>  front_end_flow_ptr = std::shared_ptr<FrontEndFlow>(new FrontEndFlow(nh));//前端流程对象
 
     ros::Rate rate(100);
     while (ros::ok())

@@ -1,0 +1,7 @@
+Log file created at: 2021/09/02 09:35:36
+Running on machine: captain
+Running duration (h:mm:ss): 0:00:00
+Log line format: [IWEF]yyyymmdd hh:mm:ss.uuuuuu threadid file:line] msg
+I20210902 09:35:36.993218  5587 file_manager.cpp:61] 存放地址：
+/home/jerry/yjj_ws/src/lidar_project/slam_data/map
+

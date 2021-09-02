@@ -32,7 +32,7 @@ void KeyFrameSubscriber::msg_callback(const geometry_msgs::PoseStampedConstPtr& 
     new_key_frame_.push_back(key_frame);
 }
 
-void KeyFrameSubscriber::ParseData(std::deque<KeyFrame>& key_frame_buff){
+void KeyFrameSubscriber::ParseData( std::deque<KeyFrame>& key_frame_buff){
     if(new_key_frame_.size() > 0){
         key_frame_buff.insert(key_frame_buff.end(),new_key_frame_.begin(),new_key_frame_.end());
         new_key_frame_.clear(); 

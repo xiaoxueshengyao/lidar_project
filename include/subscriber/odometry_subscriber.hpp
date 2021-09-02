@@ -29,7 +29,8 @@ class OdometrySubscriber{
         ros::Subscriber subscriber_;
         
         std::deque<PoseData> new_pose_data_;
-
+    public:
+        EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 

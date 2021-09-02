@@ -8,10 +8,12 @@
 
 #include <deque>
 #include <Eigen/Dense>
+#include <eigen3/Eigen/StdDeque>
 
 namespace lidar_project{
 //速度（线、角）数据
 class VelocityData{
+  
   public:
     struct LinearVelocity{
       double x = 0.0;
@@ -36,9 +38,10 @@ class VelocityData{
                          double sync_time);
     
     //把imu的速度转换到雷达坐标系
-    void TransformCoordinate(Eigen::Matrix4f transform_matrix);
+    void TransformCoordinate(Eigen::Matrix4f& transform_matrix);
 
-
+  public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 }

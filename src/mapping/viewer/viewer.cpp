@@ -45,7 +45,7 @@ bool Viewer::InitParam(const YAML::Node& config_node){
 bool Viewer::InitDataPath(const YAML::Node& config_node){
     std::string data_path = config_node["data_path"].as<std::string>();
     if(data_path == "./"){
-        data_path = "/home/jerry/yjj_ws/src/lidar_projectt";
+        data_path = "/home/jerry/yjj_ws/src/lidar_project";
     }
     key_frames_path_ = data_path + "/slam_data/key_frames";
     map_path_ = data_path + "/slam_data/map";
@@ -60,7 +60,7 @@ bool Viewer::InitDataPath(const YAML::Node& config_node){
 bool Viewer::InitFilter(std::string filter_user,
                         std::shared_ptr<CloudFilterInterface>& filter_ptr,
                         const YAML::Node& config_node){
-    std::string filter_method = config_node[filter_user+"filter"].as<std::string>();
+    std::string filter_method = config_node[filter_user+"_filter"].as<std::string>();
     LOG(INFO) <<"Viewer_"+filter_user<<"The chosen filter method is: "<<filter_method;
 
     if(filter_method == "voxel_filter"){

@@ -8,11 +8,12 @@
 
 #include "GeographicLib/LocalCartesian.hpp"
 #include <deque>
-
+#include "Eigen/StdDeque"
 
 namespace lidar_project{
 
 class GNSSData{
+
     public:
       double time = 0.0;        
       double longitude = 0.0;   //东经degrees
@@ -35,7 +36,7 @@ class GNSSData{
       void UpdateXYZ();
       //同步数据
       static bool SyncData(std::deque<GNSSData>& UnsyncedData, std::deque<GNSSData>& SyncedData,double sync_time);
-
+  
 
 };
 

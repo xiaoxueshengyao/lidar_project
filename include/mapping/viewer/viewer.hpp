@@ -67,6 +67,9 @@ class Viewer{
 
         bool has_new_global_map_ = false;
         bool has_new_local_map_ = false;
+
+    public:
+        EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 

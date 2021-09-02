@@ -28,7 +28,7 @@ void IMUSubscriber::msg_callback(const sensor_msgs::ImuConstPtr& imu_msg_ptr){
 }
 
 
-void IMUSubscriber::ParasData(std::deque<IMUData>& deque_imu_data){//这里要在main中建个deque存储数据
+void IMUSubscriber::ParasData( std::deque<IMUData>& deque_imu_data){//这里要在main中建个deque存储数据
     if(new_imu_data_.size()>0){
         deque_imu_data.insert(deque_imu_data.end(),new_imu_data_.begin(),new_imu_data_.end());
         new_imu_data_.clear();

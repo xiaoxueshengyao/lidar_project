@@ -21,16 +21,15 @@ class GNSSSubscriber{
     void ParasData(std::deque<GNSSData>& deque_gnss_data);
 
   private:
-    void msg_callback(const sensor_msgs::NavSatFixConstPtr& gnss_msg_ptr);
+    void msg_callback(const sensor_msgs::NavSatFixConstPtr& gnss_msg_ptrs);
 
   private:
     ros::NodeHandle nh_;
     ros::Subscriber subscriber_;
     std::deque<GNSSData> new_gnss_data_;
-
+  public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
-
-
 
 } // namespace lidar_project
 

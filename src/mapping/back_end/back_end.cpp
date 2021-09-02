@@ -23,7 +23,7 @@ BackEnd::BackEnd(){
 //参数文件读取，包括关键帧和优化的执行条件以及轨迹文件路径
 bool BackEnd::InitWithConfig(){
     std::string config_file_path = "/home/jerry/yjj_ws/src/lidar_project/config/BackEndConfig.yaml";
-    YAML::Node config_node = YAML::LoadFile(config_file_path);
+    YAML::Node config_node = YAML::LoadFile(config_file_path); 
 
     InitParam(config_node);
     InitDataPath(config_node);
@@ -52,10 +52,10 @@ bool BackEnd::InitDataPath(const YAML::Node& config_node){
         return false;
     }
 
-    key_frame_path_ = data_path + "/slam_data/key_frames";
+    key_frames_path_ = data_path + "/slam_data/key_frames";
     trajectory_path_ = data_path + "/slam_data/trajectory";
 
-    if(!FileManager::InitDirectory(key_frame_path_,"关键帧点云"))
+    if(!FileManager::InitDirectory(key_frames_path_,"关键帧点云"))
         return false;
     if(!FileManager::InitDirectory(trajectory_path_,"轨迹文件"))
         return false;
@@ -86,6 +86,7 @@ void BackEnd::ResetParam(){
 }
 
 
+//把里程计和真值进行保存
 bool BackEnd::SaveTrajectory(const PoseData& laser_odom, const PoseData& gnss_pose){
     for(int i=0; i<3; i++){
         for(int j=0; j<4; j++){
@@ -125,7 +126,7 @@ bool BackEnd::MaybeNewKeyFrame(const CloudData& cloud_data,const PoseData& laser
 
     if(has_new_key_frame_){
         //有关键帧后把对应点云存到硬盘
-        std::string file_path = key_frame_path_ + "/key_frame_"+std::to_string(key_frames_deque_.size()) +".pcd";
+        std::string file_path = key_frames_path_ + "/key_frame_"+std::to_string(key_frames_deque_.size()) +".pcd";
         pcl::io::savePCDFileBinary(file_path,*cloud_data.cloud_ptr);
 
         KeyFrame key_frame;

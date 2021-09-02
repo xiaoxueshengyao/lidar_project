@@ -28,7 +28,8 @@ class IMUPublisher{
         ros::NodeHandle nh_;
         ros::Publisher publisher_;
         std::string frame_id_;
-
+    public:
+        EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
 };
 

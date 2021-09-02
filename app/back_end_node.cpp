@@ -21,7 +21,9 @@ int main(int argc, char** argv){
     ros::NodeHandle nh;
 
     //创建后端流程管理指针
-    std::shared_ptr<BackEndFlow> back_end_flow_ptr = std::make_shared<BackEndFlow>(nh);
+    // std::shared_ptr<BackEndFlow> back_end_flow_ptr = std::make_shared<BackEndFlow>(nh);
+    std::shared_ptr<BackEndFlow> back_end_flow_ptr = std::shared_ptr<BackEndFlow>(new BackEndFlow(nh));
+    
     ros::Rate rate(100);
     while(ros::ok()){
         ros::spinOnce();

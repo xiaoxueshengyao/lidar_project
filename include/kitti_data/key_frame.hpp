@@ -8,6 +8,7 @@
 #define KEY_FRAME_HPP_
 
 #include <Eigen/Dense>
+#include "Eigen/StdDeque"
 
 namespace lidar_project{
 class KeyFrame{
@@ -17,7 +18,7 @@ class KeyFrame{
         Eigen::Matrix4f pose = Eigen::Matrix4f::Identity();     //关键帧位姿
 
         Eigen::Quaternionf GetQuaternion();
-
+        EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 

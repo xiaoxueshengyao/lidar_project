@@ -41,7 +41,7 @@ bool FrontEnd::InitWithConfig(){
 //关键帧提取阈值，局部地图关键帧数量
 bool FrontEnd::InitParam(const YAML::Node& config_node){
     key_frame_dis_ = config_node["key_frame_distance"].as<float>();
-    local_frame_num_ = config_node["local_frame_num"].as<float>();
+    local_frame_num_ = config_node["local_frame_num"].as<int>();
     return true;
 }
 
@@ -95,12 +95,11 @@ bool FrontEnd::InitRegistration(std::shared_ptr<RegistrationInterface>& registra
     return true;
 }
 
+//初始化滤波器类型
 bool FrontEnd::InitFilter(std::string filter_user, std::shared_ptr<CloudFilterInterface>& filter_ptr,
-                          const YAML::Node& config_node){
-                            
-    
+                          const YAML::Node& config_node){   
     std::string filter_method = config_node[filter_user+"_filter"].as<std::string>();
-    LOG(INFO) << filter_user <<"The choosen filter method is "<<filter_method;
+    LOG(INFO) << "front_" + filter_user <<"The choosen filter method is "<<filter_method;
     if(filter_method == "voxel_filter"){
         filter_ptr = std::make_shared<VoxelFilter>(config_node[filter_method][filter_user]);
         

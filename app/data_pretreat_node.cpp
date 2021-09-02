@@ -21,7 +21,8 @@ int main(int argc, char** argv){
     ros::NodeHandle nh;
 
     //创建数据预处理流程对象
-    std::shared_ptr<DataPretreatFlow> data_pretreat_flow_ptr = std::make_shared<DataPretreatFlow>(nh);
+    // std::shared_ptr<DataPretreatFlow> data_pretreat_flow_ptr = std::make_shared<DataPretreatFlow>(nh);
+    std::shared_ptr<DataPretreatFlow> data_pretreat_flow_ptr = std::shared_ptr<DataPretreatFlow>(new DataPretreatFlow(nh));
 
     ros::Rate rate(100);
     while(ros::ok()){

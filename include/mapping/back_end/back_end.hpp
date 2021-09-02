@@ -42,7 +42,7 @@ class BackEnd{
         bool MaybeOptimized();
 
     private:
-        std::string key_frame_path_ = "" ;
+        std::string key_frames_path_ = "" ;
         std::string trajectory_path_ = "";
         
         std::ofstream ground_truth_ofs_;
@@ -59,7 +59,8 @@ class BackEnd{
         Eigen::Matrix4f last_key_pose_ = Eigen::Matrix4f::Identity();
         KeyFrame latest_key_frame_;
         std::deque<KeyFrame> key_frames_deque_;
-
+    public:
+        EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 

@@ -13,10 +13,11 @@
 #include <Eigen/Dense>
 #include <deque>
 
+
 namespace lidar_project{
 //lidar data
 class CloudData{
-  public:
+    public:
     using PointT = pcl::PointXYZ;
     using CloudPointT = pcl::PointCloud<PointT>;
     using CloudPtr = CloudPointT::Ptr;
@@ -27,7 +28,8 @@ class CloudData{
   public:
     double time=0.0;
     CloudPtr cloud_ptr;
-
+  public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 

@@ -19,7 +19,7 @@ class CloudSubscriber{
   public:
     CloudSubscriber(ros::NodeHandle& nh_,std::string topic_name,size_t buff_size);
     CloudSubscriber() = default;
-    void ParaData(std::deque<CloudData>& deque_cloud_data);
+    void ParaData( std::deque<CloudData>& deque_cloud_data);
 
   private:
     void msg_callback(const sensor_msgs::PointCloud2::ConstPtr& cloud_msg_ptr);
@@ -28,7 +28,8 @@ class CloudSubscriber{
     ros::NodeHandle nh_;
     ros::Subscriber subscriber_;
     std::deque<CloudData> new_cloud_data_;
-
+  public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
 };
 

@@ -51,7 +51,8 @@ class FrontEndFlow{
 
       Eigen::Matrix4f laser_odometry_ = Eigen::Matrix4f::Identity();
 
-    
+    public:
+      EIGEN_MAKE_ALIGNED_OPERATOR_NEW 
 
 };
 

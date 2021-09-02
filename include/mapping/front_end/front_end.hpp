@@ -89,7 +89,8 @@ class FrontEnd{
 
     float key_frame_dis_ = 2.0;
     int local_frame_num_ = 20;
-
+  public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
   
 };
 

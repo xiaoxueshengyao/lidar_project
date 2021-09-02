@@ -14,6 +14,8 @@
 namespace lidar_project{
 class RegistrationInterface{
     public:
+      EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+    public:
       virtual ~RegistrationInterface() = default;
 
       virtual bool SetInputTarget(const CloudData::CloudPtr& input_target) = 0;

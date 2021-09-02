@@ -28,6 +28,9 @@ class KeyFramesSubscriber{
         ros::NodeHandle nh_;
         ros::Subscriber subscriber_;
         std::deque<KeyFrame> new_key_frames_;
+
+    public:
+        EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 

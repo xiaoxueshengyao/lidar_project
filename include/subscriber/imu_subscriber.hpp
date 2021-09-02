@@ -28,7 +28,8 @@ class IMUSubscriber{
       ros::Subscriber subscriber_;
 
       std::deque<IMUData> new_imu_data_;
-
+    public:
+      EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 

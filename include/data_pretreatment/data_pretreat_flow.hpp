@@ -68,7 +68,8 @@ class DataPretreatFlow{
 
         //gnss数据的位姿
         Eigen::Matrix4f gnss_pose_ = Eigen::Matrix4f::Identity();
-
+    public:
+        EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
 
 

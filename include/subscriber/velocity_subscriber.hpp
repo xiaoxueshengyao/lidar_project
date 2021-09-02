@@ -23,6 +23,9 @@ class VelocitySubscriber{
     ros::Subscriber subscriber_;
     std::deque<VelocityData> new_velocity_data_;
 
+  public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+
 };
 
 

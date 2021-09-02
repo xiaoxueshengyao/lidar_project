@@ -53,7 +53,8 @@ class BackEndFlow{
         PoseData current_gnss_pose_data_;
         PoseData current_laser_pose_data_;
         CloudData current_cloud_data_;
-
+    public:
+        EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 

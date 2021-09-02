@@ -36,8 +36,10 @@ void OdometryPublisher::PublishData(const Eigen::Matrix4f& transform_matrix,ros:
     odometry_.pose.pose.position.z = transform_matrix(2,3);
 
     //Rotation
-    Eigen::Matrix3f R = transform_matrix.block(0,0,3,3).matrix();//注意这里给四元数赋值的方式,先有值再给
-    Eigen::Quaternionf q(R);
+    //Eigen::Matrix3f R = transform_matrix.block<(0,0,3,3)>.matrix();//注意这里给四元数赋值的方式,先有值再给
+   // Eigen::Quaternionf q(R);
+   Eigen::Quaternionf q;
+    q = transform_matrix.block<3,3>(0,0);
     odometry_.pose.pose.orientation.w = q.w();
     odometry_.pose.pose.orientation.x = q.x();
     odometry_.pose.pose.orientation.y = q.y();

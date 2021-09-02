@@ -34,6 +34,8 @@ class OdometryPublisher{
       ros::NodeHandle nh_;
       ros::Publisher publisher_;
       nav_msgs::Odometry odometry_;  
+    public:
+      EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 
