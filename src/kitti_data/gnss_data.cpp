@@ -40,22 +40,18 @@ bool GNSSData::SyncData(std::deque<GNSSData>& UnsyncedData,std::deque<GNSSData>&
     {   
         // std::cout<<"All data size = "<<UnsyncedData.size()<<std::endl;
         if(UnsyncedData.front().time > sync_time){
-            // std::cout<<"000000"<<std::endl;
-            // std::cout<<"---------"<<std::fixed<<UnsyncedData.at(0).time<<std::endl;
-            return false;}
-        if(UnsyncedData.at(1).time < sync_time)
-            // std::cout<<"---------"<<std::fixed<<UnsyncedData.at(0).time<<std::endl;
-            std::cout<<"---------"<<std::fixed<<UnsyncedData.at(1).time<<std::endl;
+            return false;
+            }
+        if(UnsyncedData.at(1).time < sync_time){
             UnsyncedData.pop_front();
             continue;//这里偶尔会出现死循环
+        }           
         if(sync_time - UnsyncedData.front().time > 0.2){
             UnsyncedData.pop_front();
-            // std::cout<<"222222"<<std::endl;
             break;
         }
         if(UnsyncedData.at(1).time - sync_time > 0.2){
             UnsyncedData.pop_front();//考虑可以留到下一个同步时间考虑
-            // std::cout<<"333333"<<std::endl;
             break;
 
         }

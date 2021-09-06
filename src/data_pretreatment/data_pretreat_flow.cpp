@@ -188,7 +188,7 @@ bool DataPretreatFlow::TransformsData(){
                                            current_gnss_data_.local_z;
     gnss_pose_.block(0,0,3,3) = current_imu_data_.GetRotateMat();
     gnss_pose_ *= lidar_to_imu_;
-
+    // lidar_to_imu_ = lidar_to_imu_.inverse();
     current_velocity_data_.TransformCoordinate(lidar_to_imu_);
     distortion_adjust_ptr_->SetMotionInfo(0.1,current_velocity_data_);
     distortion_adjust_ptr_->AdjustCloud(current_cloud_data_.cloud_ptr,current_cloud_data_.cloud_ptr);

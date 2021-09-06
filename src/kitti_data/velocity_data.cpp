@@ -66,7 +66,7 @@ bool VelocityData::SyncData(std::deque<VelocityData>& UnsyncedData,std::deque<Ve
 void VelocityData::TransformCoordinate(Eigen::Matrix4f& transform_matrix){
     //先对旋转进行处理
     Eigen::Matrix4d matrix = transform_matrix.cast<double>();
-    matrix = matrix.inverse();
+    //matrix = matrix.inverse();
     Eigen::Matrix3d t_R = matrix.block(0,0,3,3);
     Eigen::Vector3d w(angular_velocity.x, angular_velocity.y, angular_velocity.z);
     Eigen::Vector3d v(linear_velocity.x, linear_velocity.y, linear_velocity.z);
@@ -77,7 +77,7 @@ void VelocityData::TransformCoordinate(Eigen::Matrix4f& transform_matrix){
     Eigen::Vector3d delta_v;
     delta_v(0) = w(1) * r(2) - w(2) * r(1);
     delta_v(1) = w(2) * r(0) - w(0) * r(2);
-    delta_v(2) = w(0) * r(1) - w(1) * r(0);
+    delta_v(2) = w(0) * r(1) - w(1) * r(0);//这里与原来的有更改
     v = v + delta_v;
 
     angular_velocity.x = w(0);
