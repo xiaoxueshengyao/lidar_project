@@ -183,10 +183,13 @@ bool DataPretreatFlow::TransformsData(){
     gnss_pose_ = Eigen::Matrix4f::Identity();
 
     current_gnss_data_.UpdateXYZ();//转换为xyz
-    gnss_pose_.topRightCorner(3,1) << current_gnss_data_.local_x,
-                                           current_gnss_data_.local_y,
-                                           current_gnss_data_.local_z;
-    gnss_pose_.block(0,0,3,3) = current_imu_data_.GetRotateMat();
+    // gnss_pose_.topRightCorner(3,1) << current_gnss_data_.local_x,
+    //                                        current_gnss_data_.local_y,
+    //                                        current_gnss_data_.local_z;
+    gnss_pose_(0,3) = current_gnss_data_.local_x;
+    gnss_pose_(1,3) = current_gnss_data_.local_y;
+    gnss_pose_(2,3) = current_gnss_data_.local_z;
+    gnss_pose_.block<3,3>(0,0) = current_imu_data_.GetRotateMat();
     gnss_pose_ *= lidar_to_imu_;
     // lidar_to_imu_ = lidar_to_imu_.inverse();
     current_velocity_data_.TransformCoordinate(lidar_to_imu_);

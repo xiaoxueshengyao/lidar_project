@@ -67,7 +67,8 @@ void VelocityData::TransformCoordinate(Eigen::Matrix4f& transform_matrix){
     //先对旋转进行处理
     Eigen::Matrix4d matrix = transform_matrix.cast<double>();
     //matrix = matrix.inverse();
-    Eigen::Matrix3d t_R = matrix.block(0,0,3,3);
+    // Eigen::Matrix3d t_R = matrix.block(0,0,3,3);
+    Eigen::Matrix3d t_R = matrix.block<3,3>(0,0);
     Eigen::Vector3d w(angular_velocity.x, angular_velocity.y, angular_velocity.z);
     Eigen::Vector3d v(linear_velocity.x, linear_velocity.y, linear_velocity.z);
     w = t_R * w;

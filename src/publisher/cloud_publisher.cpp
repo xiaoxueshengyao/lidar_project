@@ -31,7 +31,10 @@ bool CloudPublisher::HasSubscribers(){
 //就是把PCL点云数据转化为sensormsg
 void CloudPublisher::PublishData(CloudData::CloudPtr& cloud_ptr_input,ros::Time time){
     sensor_msgs::PointCloud2Ptr cloud_ptr_out(new sensor_msgs::PointCloud2());
+    cloud_ptr_input->width = cloud_ptr_input->points.size();
+    cloud_ptr_input->height = 1;
     pcl::toROSMsg(*cloud_ptr_input,*cloud_ptr_out);//转成ros数据
+
     cloud_ptr_out->header.stamp = time;
     cloud_ptr_out->header.frame_id = frame_id_;
     publisher_.publish(*cloud_ptr_out);
