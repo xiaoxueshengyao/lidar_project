@@ -30,8 +30,8 @@ class DataPretreatFlow{
         bool Run();
 
     private:
-        bool ReadData();
-        bool InitCalibration();
+        bool ReadData();                //读取数据
+        bool InitCalibration();       
         bool InitGNSS();
         bool HasData();
         bool ValidData();

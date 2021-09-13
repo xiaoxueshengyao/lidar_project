@@ -76,10 +76,10 @@ bool Viewer::InitFilter(std::string filter_user,
 }
 
 //关键帧更新流程
-bool Viewer::Update(std::deque<KeyFrame>& new_key_frames,
-                    std::deque<KeyFrame>& optimized_key_frames,
-                    PoseData transformed_data,
-                    CloudData cloud_data){
+bool Viewer::Update(std::deque<KeyFrame>& new_key_frames,                   //新关键帧
+                                            std::deque<KeyFrame>& optimized_key_frames,       //优化后
+                                            PoseData transformed_data,                                                //位姿数据
+                                            CloudData cloud_data){                                                          //点云数据
     ResetParam();
 
     if(optimized_key_frames.size() > 0){
@@ -87,6 +87,7 @@ bool Viewer::Update(std::deque<KeyFrame>& new_key_frames,
         optimized_key_frames.clear();
         OptimizeKeyFrames();
         has_new_local_map_ = true;
+        std::cout<<"优化一次"<<std::endl;
     }
 
     //添加新关键帧
@@ -98,6 +99,7 @@ bool Viewer::Update(std::deque<KeyFrame>& new_key_frames,
 
     optimized_odom_ = transformed_data;
     optimized_odom_.pose = pose_to_optimize_ * optimized_odom_.pose;//???
+    std::cout<<"需要把点云转过去的位姿"<<"\n"<<optimized_odom_.pose<<std::endl;
 
     optimized_cloud_ = cloud_data;
     pcl::transformPointCloud(*cloud_data.cloud_ptr,*optimized_cloud_.cloud_ptr,optimized_odom_.pose);
@@ -206,6 +208,7 @@ Eigen::Matrix4f& Viewer::GetCurrentPose(){
 
 CloudData::CloudPtr& Viewer::GetCurrentScan(){
     frame_filter_ptr_->Filter(optimized_cloud_.cloud_ptr,optimized_cloud_.cloud_ptr);
+    std::cout<<"Got Current scan point cloud after filter"<<std::endl;
     return optimized_cloud_.cloud_ptr;
 }
 

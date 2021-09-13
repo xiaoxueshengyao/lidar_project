@@ -34,6 +34,7 @@ set(ALL_TARGET_LIBRARIES "")#建立一个变量，把需要的库都放一起
 
 #PCL库
 find_package(PCL REQUIRED)
+message("PCL version  is ： ${PCL_VERSION}")
 list(REMOVE_ITEM PCL_LIBRARIES "vtkproj4")
 include_directories(${PCL_INCLUDE_DIRS})
 link_directories(${PCL_LIBRARY_DIRS})
@@ -88,9 +89,9 @@ INCLUDE_DIRS include)
 
 file(GLOB_RECURSE ALL_SRCS "*.cpp")
 file(GLOB_RECURSE APP_SRCS "app/*.cpp")
-file(GLOB_RECURSE THIRD_PARTY_SRCS "third_party/*.cpp")
+#file(GLOB_RECURSE THIRD_PARTY_SRCS "third_party/*.cpp")
 list(REMOVE_ITEM ALL_SRCS ${APP_SRCS})
-list(REMOVE_ITEM ALL_SRCS ${THIRD_PARTY_SRCS})
+#list(REMOVE_ITEM ALL_SRCS ${THIRD_PARTY_SRCS})
 #对列表的操作分为读取、查找、修改、排序
 
 #add_executable(front_end app/front_test.cpp src/kitti_data.cpp src/tf_listener.cpp src/front_end_back.cpp)

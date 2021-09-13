@@ -14,6 +14,10 @@ Eigen::Quaternionf PoseData::GetQuaternion(){
     return q;
 }
 
-
+PoseData & PoseData::operator=(const PoseData& p){
+    pose = p.pose;
+    time = p.time;
+    return *this;
+}
 
 }

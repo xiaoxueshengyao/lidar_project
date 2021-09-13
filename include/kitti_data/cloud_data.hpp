@@ -10,7 +10,7 @@
 #include <pcl/point_types.h>
 #include <pcl/point_cloud.h>
 
-#include <Eigen/Dense>
+
 #include <deque>
 
 
@@ -28,8 +28,7 @@ class CloudData{
   public:
     double time=0.0;
     CloudPtr cloud_ptr;
-  public:
-    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+
 };
 
 

@@ -63,7 +63,7 @@ bool VelocityData::SyncData(std::deque<VelocityData>& UnsyncedData,std::deque<Ve
  * 由于IMU和雷达所处的位置并不重合，存在杆臂，所以在转弯时两者的速度并不一致，
  * 需要按照两者的相对坐标，把速度转换到雷达上
 ***/
-void VelocityData::TransformCoordinate(Eigen::Matrix4f& transform_matrix){
+void VelocityData::TransformCoordinate(Eigen::Matrix4f transform_matrix){
     //先对旋转进行处理
     Eigen::Matrix4d matrix = transform_matrix.cast<double>();
     //matrix = matrix.inverse();

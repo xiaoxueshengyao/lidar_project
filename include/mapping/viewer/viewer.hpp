@@ -19,8 +19,8 @@ namespace lidar_project{
 class Viewer{
     public:
         Viewer();
-        bool Update(std::deque<KeyFrame>& new_key_frames,
-                    std::deque<KeyFrame>& optimized_key_frames,
+        bool Update(std::deque<KeyFrame>& new_key_frames,       //关键帧队列
+                    std::deque<KeyFrame>& optimized_key_frames,           //优化后
                     PoseData transformed_data,
                     CloudData cloud_data);
         bool SaveMap();
@@ -37,14 +37,14 @@ class Viewer{
         bool InitParam(const YAML::Node& config_node);
         bool InitDataPath(const YAML::Node& config_node);
         bool InitFilter(std::string filter_user,
-                        std::shared_ptr<CloudFilterInterface>& filter_ptr,
-                        const YAML::Node& config_node);
+                                      std::shared_ptr<CloudFilterInterface>& filter_ptr,
+                                      const YAML::Node& config_node);
         void ResetParam();
         bool OptimizeKeyFrames();
         bool JointGlobalMap(CloudData::CloudPtr& global_map_ptr);
         bool JointLocalMap(CloudData::CloudPtr& local_map_ptr);
         bool JointCloudMap(const std::deque<KeyFrame>& key_frames,
-                           CloudData::CloudPtr& map_cloud_ptr);
+                                                    CloudData::CloudPtr& map_cloud_ptr);
 
     private:
         std::string data_path_ = "";

@@ -28,13 +28,14 @@ void OdometrySubscriber::msg_callback(const nav_msgs::OdometryConstPtr& odom_msg
     q.y() = odom_msg_ptr->pose.pose.orientation.y;
     q.z() = odom_msg_ptr->pose.pose.orientation.z;
     q.w() = odom_msg_ptr->pose.pose.orientation.w;
-    pose_data.pose.block(0,0,3,3) = q.matrix();
+    // pose_data.pose.block(0,0,3,3) = q.matrix();
+    pose_data.pose.block<3,3>(0,0) = q.matrix();
 
     new_pose_data_.push_back(pose_data);
 }
 
 
-void OdometrySubscriber::ParseData(std::deque<PoseData>& pose_data_buff){
+void OdometrySubscriber::ParseData(std::deque<PoseData,Eigen::aligned_allocator<PoseData>>& pose_data_buff){
     if(new_pose_data_.size() > 0){
         pose_data_buff.insert(pose_data_buff.end(),new_pose_data_.begin(),new_pose_data_.end());
         new_pose_data_.clear();

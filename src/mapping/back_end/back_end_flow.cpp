@@ -18,21 +18,20 @@ namespace lidar_project{
 
 //构造函数，初始化私有变量
 BackEndFlow::BackEndFlow(ros::NodeHandle& nh){
-    // cloud_sub_ptr_ = std::make_shared<CloudSubscriber>(nh,"synced_cloud",100000);
+    cloud_sub_ptr_ = std::make_shared<CloudSubscriber>(nh,"/synced_cloud",100000);
     // gnss_pose_sub_ptr_ = std::make_shared<OdometrySubscriber>(nh,"synced_gnss",100000);
     // laser_odom_sub_ptr_ = std::make_shared<OdometrySubscriber>(nh,"laser_odom",100000);
-    cloud_sub_ptr_ = std::shared_ptr<CloudSubscriber>(new CloudSubscriber(nh,"synced_cloud",100000));
-    gnss_pose_sub_ptr_ = std::shared_ptr<OdometrySubscriber>(new OdometrySubscriber(nh,"synced_gnss",100000));
-    laser_odom_sub_ptr_ = std::shared_ptr<OdometrySubscriber>(new OdometrySubscriber(nh,"laser_odom",100000));
+    gnss_pose_sub_ptr_ = std::shared_ptr<OdometrySubscriber>(new OdometrySubscriber(nh,"/synced_gnss",100000));
+    laser_odom_sub_ptr_ = std::shared_ptr<OdometrySubscriber>(new OdometrySubscriber(nh,"/laser_odom",100000));
 
     //发布优化后的位姿
     // transformed_odom_pub_ptr_ = std::make_shared<OdometryPublisher>(nh,"transformed_odom","/map","/lidar",100);
     // key_frame_pub_ptr_ = std::make_shared<KeyFramePublisher>(nh,"/key_frame","map",100);
-    transformed_odom_pub_ptr_ = std::shared_ptr<OdometryPublisher>(new OdometryPublisher(nh,"transformed_odom","/map","/lidar",100));
-    key_frame_pub_ptr_ = std::shared_ptr<KeyFramePublisher>(new KeyFramePublisher(nh,"/key_frame","map",100));
+    transformed_odom_pub_ptr_ = std::shared_ptr<OdometryPublisher>(new OdometryPublisher(nh, "/transformed_odom", "/map", "/lidar", 100));
+    key_frame_pub_ptr_ = std::shared_ptr<KeyFramePublisher>(new KeyFramePublisher(nh,"/key_frame", "/map",100));
     //优化后的关键帧位姿
     // key_frames_pub_ptr_ = std::make_shared<KeyFramesPublisher>(nh,"/optimized_key_frames","map",100);
-    key_frames_pub_ptr_ = std::shared_ptr<KeyFramesPublisher>(new KeyFramesPublisher(nh,"/optimized_key_frames","map",100));
+    key_frames_pub_ptr_ = std::shared_ptr<KeyFramesPublisher>(new KeyFramesPublisher(nh,"/optimized_key_frames", "/map",100));
 
     // back_end_ptr_ = std::make_shared<BackEnd>();
     back_end_ptr_ = std::shared_ptr<BackEnd>(new BackEnd());
@@ -47,7 +46,6 @@ bool BackEndFlow::Run(){
     
     while (HasData())
     {
-        /* code */
         if(!ValidData())
             continue;
         UpdateBackEnd();
@@ -88,8 +86,10 @@ bool BackEndFlow::ValidData(){
     current_gnss_pose_data_ = gnss_pose_data_buff_.front();
     current_laser_pose_data_ = laser_odom_data_buff_.front();
 
+
     double diff_gnss_time = current_cloud_data_.time - current_gnss_pose_data_.time;
     double diff_laser_time = current_cloud_data_.time - current_laser_pose_data_.time;
+
 
     //如果时间差距过大，根据实际情况进行舍去
     if(diff_gnss_time < -0.05 || diff_laser_time < -0.05){
@@ -123,7 +123,7 @@ bool BackEndFlow::UpdateBackEnd(){
         odom_init_pose = current_gnss_pose_data_.pose * current_laser_pose_data_.pose.inverse();
     }
     current_laser_pose_data_.pose = odom_init_pose * current_laser_pose_data_.pose;
-
+    
     return back_end_ptr_->Updata(current_cloud_data_,current_laser_pose_data_,current_gnss_pose_data_);
 
 

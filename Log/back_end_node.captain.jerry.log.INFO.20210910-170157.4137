@@ -1,0 +1,10 @@
+Log file created at: 2021/09/10 17:01:57
+Running on machine: captain
+Running duration (h:mm:ss): 0:00:00
+Log line format: [IWEF]yyyymmdd hh:mm:ss.uuuuuu threadid file:line] msg
+I20210910 17:01:57.807354  4137 file_manager.cpp:29] 关键帧点云 存放地址: 
+/home/jerry/yjj_ws/src/lidar_project/slam_data/key_frames
+
+I20210910 17:01:57.807642  4137 file_manager.cpp:29] 轨迹文件 存放地址: 
+/home/jerry/yjj_ws/src/lidar_project/slam_data/trajectory
+

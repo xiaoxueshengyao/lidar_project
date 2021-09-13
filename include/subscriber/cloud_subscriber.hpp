@@ -5,14 +5,15 @@
 #ifndef CLOUD_SUBSCRIBER_HPP_
 #define CLOUD_SUBSCRIBER_HPP_
 
-#include "kitti_data/cloud_data.hpp"
+
 #include <ros/ros.h>
 #include <sensor_msgs/PointCloud2.h>
 #include <pcl/point_types.h>
 #include <pcl/point_cloud.h>
 #include <pcl_conversions/pcl_conversions.h>
-
+#include "kitti_data/cloud_data.hpp"
 #include <deque>
+
 
 namespace lidar_project{
 class CloudSubscriber{
@@ -28,8 +29,8 @@ class CloudSubscriber{
     ros::NodeHandle nh_;
     ros::Subscriber subscriber_;
     std::deque<CloudData> new_cloud_data_;
-  public:
-    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+
+
 
 };
 

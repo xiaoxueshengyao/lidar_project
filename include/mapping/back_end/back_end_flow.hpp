@@ -22,6 +22,7 @@
 #include "publisher/key_frame_publisher.hpp"
 #include "publisher/key_frames_publisher.hpp"
 
+
 namespace lidar_project{
 class BackEndFlow{
     public:
@@ -47,8 +48,8 @@ class BackEndFlow{
         std::shared_ptr<BackEnd> back_end_ptr_;
 
         std::deque<CloudData> cloud_data_buff_;
-        std::deque<PoseData> gnss_pose_data_buff_;
-        std::deque<PoseData> laser_odom_data_buff_;
+        std::deque<PoseData,Eigen::aligned_allocator<PoseData>> gnss_pose_data_buff_;
+        std::deque<PoseData,Eigen::aligned_allocator<PoseData>> laser_odom_data_buff_;
 
         PoseData current_gnss_pose_data_;
         PoseData current_laser_pose_data_;

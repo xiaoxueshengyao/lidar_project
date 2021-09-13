@@ -38,7 +38,7 @@ class IMUData{
           w /= norm;
         }
     };
-
+  public:
     struct AngularVelocity{
         double x = 0.0;
         double y = 0.0;
@@ -57,7 +57,7 @@ class IMUData{
   LinearAcceleration linear_acceleration;
 
   public:
-    Eigen::Matrix3f GetRotateMat();
+    Eigen::Matrix3f GetRotateMat();//把四元数转换成旋转矩阵
 
     static bool SyncData(std::deque<IMUData>& UnsyncedData, std::deque<IMUData>& SyncedData, double sync_time);
 

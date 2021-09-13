@@ -14,8 +14,9 @@ using namespace lidar_project;
 
 int main(int argc, char** argv){
     google::InitGoogleLogging(argv[0]);
+    FLAGS_log_dir = "/home/jerry/yjj_ws/src/lidar_project/Log";
     FLAGS_alsologtostderr = 1;//记录日志的同时输出到stderr
-    FLAGS_colorlogtostderr = 1;//将彩色日志输出到stderr
+
     
     ros::init(argc,argv,"back_end_node");
     ros::NodeHandle nh;

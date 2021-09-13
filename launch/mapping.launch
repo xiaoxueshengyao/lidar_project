@@ -1,5 +1,5 @@
 <launch>
-    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find lidar_project)/launch/test_frame.rviz"></node>
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find lidar_project)/launch/mapping.rviz"></node>
     <node pkg="lidar_project" type="data_pretreat_node" name="data_pretreat_node"  output="screen" ></node>
     <node pkg="lidar_project" type="front_end_node" name="front_end_node" output="screen"  ></node>
     <node pkg="lidar_project" type="back_end_node" name="back_end_node" output="screen"></node>

@@ -27,8 +27,7 @@ class GNSSSubscriber{
     ros::NodeHandle nh_;
     ros::Subscriber subscriber_;
     std::deque<GNSSData> new_gnss_data_;
-  public:
-    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+
 };
 
 } // namespace lidar_project

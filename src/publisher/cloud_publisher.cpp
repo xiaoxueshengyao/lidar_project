@@ -2,6 +2,7 @@
 
 namespace lidar_project{
 
+//构造函数，发布者话题和size设定
 CloudPublisher::CloudPublisher(ros::NodeHandle& nh, 
                                std::string topic_name,
                                std::string frame_id,
@@ -11,7 +12,7 @@ CloudPublisher::CloudPublisher(ros::NodeHandle& nh,
     
 }
 
-
+//发布者发布数据
 void CloudPublisher::Publish(CloudData::CloudPtr& cloud_ptr, double time){
     ros::Time ros_time((float)time);
     PublishData(cloud_ptr,ros_time);
@@ -25,6 +26,9 @@ void CloudPublisher::Publish(CloudData::CloudPtr& cloud_ptr){
 }
 
 bool CloudPublisher::HasSubscribers(){
+    if(publisher_.getNumSubscribers()!=0){
+        std::cout<<"The subsciber of point cloud is "<<publisher_.getNumSubscribers()<<std::endl;   
+    }
     return publisher_.getNumSubscribers() != 0;
 }
 

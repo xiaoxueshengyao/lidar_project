@@ -11,11 +11,11 @@ namespace lidar_project
 {
 //主要是获得角速度和线速度信息，用于后续转换
 void DistortionAdjust::SetMotionInfo(float scan_period,VelocityData velocity_data){
-    std::cout<<"Ready to get Velocity Infomation"<<std::endl;
+    //std::cout<<"Ready to get Velocity Infomation"<<std::endl;
     scan_period_ = scan_period;
     velocity_ << velocity_data.linear_velocity.x,velocity_data.linear_velocity.y,velocity_data.linear_velocity.z;
     angular_rate_ << velocity_data.angular_velocity.x,velocity_data.angular_velocity.y,velocity_data.angular_velocity.z;
-    std::cout<<"Got Velocity Infomation"<<std::endl;
+    //std::cout<<"Got Velocity Infomation"<<std::endl;
 }
 
 bool DistortionAdjust::AdjustCloud(CloudData::CloudPtr& input_cloud_ptr, CloudData::CloudPtr& output_cloud_ptr){

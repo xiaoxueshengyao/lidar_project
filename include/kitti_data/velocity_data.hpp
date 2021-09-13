@@ -38,7 +38,7 @@ class VelocityData{
                          double sync_time);
     
     //把imu的速度转换到雷达坐标系
-    void TransformCoordinate(Eigen::Matrix4f& transform_matrix);
+    void TransformCoordinate(Eigen::Matrix4f transform_matrix);
 
   public:
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW

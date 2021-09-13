@@ -11,23 +11,13 @@
 
 using namespace lidar_project;
 
-/***
-std::shared_ptr<FrontEndFlow> _front_end_flow_ptr;
 
-//保存地图的回调函数
-bool save_map_callback(saveMap::Request&  request, saveMap::Response& response){
-    response.succeed = _front_end_flow_ptr->SaveMap();
-    _front_end_flow_ptr->PublisheGlobalMap();
-    return response.succeed;
-
-}
-***/
 int main(int argc, char** argv){
     google::InitGoogleLogging(argv[0]);
     FLAGS_log_dir = "/home/jerry/yjj_ws/src/lidar_project/Log";
     FLAGS_alsologtostderr = 1;
 
-    ros::init(argc,argv,"front_end_flow");
+    ros::init(argc,argv,"front_end_node");
     ros::NodeHandle nh;
 
     //ros::ServiceServer service = nh.advertiseService("save_map",save_map_callback);
