@@ -1,5 +1,0 @@
-Log file created at: 2021/09/09 14:01:16
-Running on machine: captain
-Running duration (h:mm:ss): 0:00:00
-Log line format: [IWEF]yyyymmdd hh:mm:ss.uuuuuu threadid file:line] msg
-I20210909 14:01:16.854739 13646 front_end.cpp:86] The registration method is NDT

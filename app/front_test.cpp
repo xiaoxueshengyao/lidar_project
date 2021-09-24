@@ -228,7 +228,7 @@ int main(int argc, char** argv){
                             cloud_global->header.stamp = ros::Time::now();
                             cloud_global->header.frame_id = "map";
                             global_map_pub.publish(cloud_global);
-                            // pcl::io::savePCDFileASCII("/home/jingwan/data/global_map.pcd",*global_map_ptr);
+                            pcl::io::savePCDFileASCII("/home/jingwan/data/global_map.pcd",*global_map_ptr);
 
                             has_global_map_published = true;
                         }

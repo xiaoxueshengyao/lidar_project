@@ -1,9 +1,0 @@
-Log file created at: 2021/08/26 23:13:03
-Running on machine: captain
-Running duration (h:mm:ss): 0:00:00
-Log line format: [IWEF]yyyymmdd hh:mm:ss.uuuuuu threadid file:line] msg
-I20210826 23:13:03.038755  6563 front_end.cpp:86] The registration method is NDT
-I20210826 23:13:03.039328  6563 ndt_registration.cpp:28] NDT parameters: 
-resolution: 1, step size: 0.1, transformation epsilon0.01, 
-I20210826 23:13:03.039494  6563 front_end.cpp:103] local_mapThe choosen filter method is voxel_filter
-I20210826 23:13:03.039912  6563 front_end.cpp:103] frameThe choosen filter method is voxel_filter

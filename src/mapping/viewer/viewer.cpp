@@ -22,7 +22,7 @@ Viewer::Viewer(){
 }
 
 bool Viewer::InitWithConfig(){
-    std::string config_file_path = "/home/jerry/yjj_ws/src/lidar_project/config/viewer_config.yaml";
+    std::string config_file_path = "/home/jingwan/lslidar_ws/src/lidar_project/config/viewer_config.yaml";
     YAML::Node config_node = YAML::LoadFile(config_file_path);
 
     InitParam(config_node);
@@ -45,7 +45,7 @@ bool Viewer::InitParam(const YAML::Node& config_node){
 bool Viewer::InitDataPath(const YAML::Node& config_node){
     std::string data_path = config_node["data_path"].as<std::string>();
     if(data_path == "./"){
-        data_path = "/home/jerry/yjj_ws/src/lidar_project";
+        data_path = "/home/jingwan/lslidar_ws/src/lidar_project";
     }
     key_frames_path_ = data_path + "/slam_data/key_frames";
     map_path_ = data_path + "/slam_data/map";
@@ -78,8 +78,8 @@ bool Viewer::InitFilter(std::string filter_user,
 //关键帧更新流程
 bool Viewer::Update(std::deque<KeyFrame>& new_key_frames,                   //新关键帧
                                             std::deque<KeyFrame>& optimized_key_frames,       //优化后
-                                            PoseData transformed_data,                                                //位姿数据
-                                            CloudData cloud_data){                                                          //点云数据
+                                            PoseData transformed_data,                        //位姿数据
+                                            CloudData cloud_data){                            //点云数据
     ResetParam();
 
     if(optimized_key_frames.size() > 0){

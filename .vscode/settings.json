@@ -73,5 +73,9 @@
         "condition_variable": "cpp",
         "mutex": "cpp",
         "core": "cpp"
-    }
+    },
+    "python.analysis.extraPaths": [
+        "/home/jingwan/lslidar_ws/devel/lib/python2.7/dist-packages",
+        "/opt/ros/kinetic/lib/python2.7/dist-packages"
+    ]
 }

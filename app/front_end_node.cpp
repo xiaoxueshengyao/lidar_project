@@ -14,7 +14,7 @@ using namespace lidar_project;
 
 int main(int argc, char** argv){
     google::InitGoogleLogging(argv[0]);
-    FLAGS_log_dir = "/home/jerry/yjj_ws/src/lidar_project/Log";
+    FLAGS_log_dir = "/home/jingwan/lslidar_ws/src/lidar_project/Log";
     FLAGS_alsologtostderr = 1;
 
     ros::init(argc,argv,"front_end_node");
