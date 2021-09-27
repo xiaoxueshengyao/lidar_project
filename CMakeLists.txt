@@ -24,6 +24,7 @@ find_package(catkin REQUIRED COMPONENTS
 add_service_files(
   FILES
   saveMap.srv
+  optimizeMap.srv
 )
 generate_messages(
   DEPENDENCIES
@@ -31,6 +32,9 @@ generate_messages(
 )
 
 set(ALL_TARGET_LIBRARIES "")#建立一个变量，把需要的库都放一起
+
+#g2o库
+include(cmake/g2o.cmake)
 
 #PCL库
 find_package(PCL REQUIRED)
@@ -109,19 +113,19 @@ target_link_libraries(test_frame_node ${catkin_LIBRARIES} ${ALL_TARGET_LIBRARIES
 #数据预处理节点
 add_executable(data_pretreat_node app/data_pretreat_node.cpp ${ALL_SRCS})
 add_dependencies(data_pretreat_node ${catkin_EXPORTED_TARGETS})
- #在使用ROS的message、service、action时注意添加 add_dependencies
- #添加对其它package消息的依赖，前提是已经通过find_package()引入了这个package
- target_link_libraries(data_pretreat_node ${catkin_LIBRARIES} ${ALL_TARGET_LIBRARIES} glog)
+#在使用ROS的message、service、action时注意添加 add_dependencies
+#添加对其它package消息的依赖，前提是已经通过find_package()引入了这个package
+target_link_libraries(data_pretreat_node ${catkin_LIBRARIES} ${ALL_TARGET_LIBRARIES} glog)
 
- #前端节点
- add_executable(front_end_node app/front_end_node.cpp ${ALL_SRCS})
- add_dependencies(front_end_node ${catkin_EXPORTED_TARGETS})
- target_link_libraries(front_end_node ${catkin_LIBRARIES} ${ALL_TARGET_LIBRARIES} glog)
+#前端节点
+add_executable(front_end_node app/front_end_node.cpp ${ALL_SRCS})
+add_dependencies(front_end_node ${catkin_EXPORTED_TARGETS})
+target_link_libraries(front_end_node ${catkin_LIBRARIES} ${ALL_TARGET_LIBRARIES} glog)
 
- #后端节点
- add_executable(back_end_node app/back_end_node.cpp ${ALL_SRCS})
- add_dependencies(back_end_node ${catkin_EXPORTED_TARGETS})
- target_link_libraries(back_end_node ${catkin_LIBRARIES} ${ALL_TARGET_LIBRARIES} glog)
+#后端节点
+add_executable(back_end_node app/back_end_node.cpp ${ALL_SRCS})
+add_dependencies(back_end_node ${catkin_EXPORTED_TARGETS})
+target_link_libraries(back_end_node ${catkin_LIBRARIES} ${ALL_TARGET_LIBRARIES} glog)
 
 #可视化节点
 add_executable(viewer_node app/viewer_node.cpp ${ALL_SRCS})
