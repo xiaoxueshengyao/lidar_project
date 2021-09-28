@@ -10,10 +10,10 @@
 
 #include <string>
 #include <deque>
-#include <Eigen/Dense>>
+#include <Eigen/Dense>
 
 
-namesapce lidar_project{
+namespace lidar_project{
 class InterfaceGraphOptimizer{
     public:
         virtual ~InterfaceGraphOptimizer(){}
@@ -39,10 +39,7 @@ class InterfaceGraphOptimizer{
     protected:
         int max_iteration_num_ = 512;
 };
-}
-
-
-
+}//namespacee lidar_project
 
 
 

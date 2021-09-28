@@ -7,7 +7,8 @@
                 "/usr/local/include/pcl-1.9",
                 "/opt/ros/melodic/include/**",
                 "${workspaceFolder}/include",
-                "/opt/ros/melodic/include"
+                "/opt/ros/melodic/include",
+                "/usr/locla/include/g2o"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",
