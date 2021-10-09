@@ -10,6 +10,7 @@
 #include <g2o/types/slam3d_addons/types_slam3d_addons.h>//线面
 
 namespace g2o{
+//本质是添加观测和计算误差
 class EdgeSE3PriorXYZ : public g2o::BaseUnaryEdge<3,Eigen::Vector3d,g2o::VertexSE3>{
     public:
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW

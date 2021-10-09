@@ -1,0 +1,10 @@
+Log file created at: 2021/10/08 14:34:43
+Running on machine: jingwan
+Running duration (h:mm:ss): 0:00:00
+Log line format: [IWEF]yyyymmdd hh:mm:ss.uuuuuu threadid file:line] msg
+I20211008 14:34:43.869972  5876 file_manager.cpp:61] 存放地址：
+/home/jingwan/lslidar_ws/src/lidar_project/slam_data/map
+
+I20211008 14:34:43.870267  5876 viewer.cpp:64] Viewer_frameThe chosen filter method is: voxel_filter
+I20211008 14:34:43.870360  5876 viewer.cpp:64] Viewer_local_mapThe chosen filter method is: voxel_filter
+I20211008 14:34:43.870393  5876 viewer.cpp:64] Viewer_global_mapThe chosen filter method is: voxel_filter

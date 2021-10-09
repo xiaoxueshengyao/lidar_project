@@ -10,7 +10,17 @@
 #include "general_models/file_manager/file_manager.hpp"     //文件管理
 #include "glog/logging.h"
 
+#include "lidar_project/optimizeMap.h"
 using namespace lidar_project;
+
+std::shared_ptr<BackEndFlow> _back_end_flow_ptr;
+bool _need_optimize_map = false;
+
+bool optimize_map_callback(optimizeMap::Request& request, optimizeMap::Response& response){
+    _need_optimize_map = true;
+    response.succeed = true;
+    return response.succeed;
+}
 
 int main(int argc, char** argv){
     google::InitGoogleLogging(argv[0]);
@@ -21,14 +31,23 @@ int main(int argc, char** argv){
     ros::init(argc,argv,"back_end_node");
     ros::NodeHandle nh;
 
+    ros::ServiceServer service = nh.advertiseService("optimize_map",optimize_map_callback);
+    _back_end_flow_ptr = std::shared_ptr<BackEndFlow>(new BackEndFlow(nh));
+
     //创建后端流程管理指针
     // std::shared_ptr<BackEndFlow> back_end_flow_ptr = std::make_shared<BackEndFlow>(nh);
-    std::shared_ptr<BackEndFlow> back_end_flow_ptr = std::shared_ptr<BackEndFlow>(new BackEndFlow(nh));
+    // std::shared_ptr<BackEndFlow> back_end_flow_ptr = std::shared_ptr<BackEndFlow>(new BackEndFlow(nh));
     
     ros::Rate rate(100);
     while(ros::ok()){
         ros::spinOnce();
-        back_end_flow_ptr->Run();
+        _back_end_flow_ptr->Run();
+
+        //优化
+        if(_need_optimize_map){
+            _back_end_flow_ptr->ForceOptimize();
+            _need_optimize_map = false;
+        }
 
         rate.sleep();
     }

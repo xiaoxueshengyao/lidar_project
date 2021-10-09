@@ -34,8 +34,10 @@ class ViewerFlow{
         bool ReadData();
         bool HasData();
         bool ValidData();
-        bool UpdateViewer();
-        bool PublishData();
+        // bool UpdateViewer();
+        // bool PublishData();
+        bool PublishGlobalData();//发布全局地图
+        bool PublishLocalData();//发布局部地图
 
 
     private:

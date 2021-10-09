@@ -41,6 +41,7 @@ G2O_USE_OPTIMIZATION_LIBRARY(pcg)
 G2O_USE_OPTIMIZATION_LIBRARY(cholmod)
 G2O_USE_OPTIMIZATION_LIBRARY(csparse)
 
+//继承自优化接口类，接口中的函数基本都是纯虚函数，在继承后需要一一实现，关键字写override，不能再“=0”
 namespace lidar_project{
 class G2oGraphOptimizer : public InterfaceGraphOptimizer{
     public:
@@ -50,17 +51,17 @@ class G2oGraphOptimizer : public InterfaceGraphOptimizer{
         int GetNodeNum() override;
         //添加节点、边、鲁棒核
         void SetEdgeRobustKernel(std::string robust_kernel_name,double robust_kernel_size) override;
-        void AddSe3Node(const Eigen::Isometry3d& pose, bool need_fix) = 0;//第一个点讨论是否fix
+        void AddSe3Node(const Eigen::Isometry3d& pose, bool need_fix) override;//第一个点讨论是否fix
         void AddSe3Edge(int vertex_index1,
                         int vertex_index2,
                         const Eigen::Isometry3d& relative_pose,//帧间相对位姿
-                        const Eigen::VectorXd noise) = 0;//信息矩阵，权重
+                        const Eigen::VectorXd noise) override;//信息矩阵，权重
         void AddSe3PriorXYZEdge(int se3_vertex_index,
                                 const Eigen::Vector3d& xyz,
-                                Eigen::VectorXd noise) = 0;
+                                Eigen::VectorXd noise) override;
         void AddSe3PriorQuaternionEdge(int se3_vertex_index,
                                        const Eigen::Quaterniond& quat,//姿态作为先验边
-                                       Eigen::VectorXd noise) = 0;
+                                       Eigen::VectorXd noise) override;
 
     private:
         Eigen::MatrixXd CalculateSe3EdgeInformationMatrix(Eigen::VectorXd noise);//se3边信息矩阵
@@ -70,7 +71,7 @@ class G2oGraphOptimizer : public InterfaceGraphOptimizer{
 
     private:
         g2o::RobustKernelFactory* robust_kernel_factory_;
-        std::unique_ptr<g2o::SparseOptimizer> graph_ptr_;//稀疏求解器
+        std::unique_ptr<g2o::SparseOptimizer> graph_ptr_;
 
         std::string robust_kernel_name_;
         double robust_kernel_size_;

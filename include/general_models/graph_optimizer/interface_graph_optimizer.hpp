@@ -14,6 +14,7 @@
 
 
 namespace lidar_project{
+//优化类接口
 class InterfaceGraphOptimizer{
     public:
         virtual ~InterfaceGraphOptimizer(){}

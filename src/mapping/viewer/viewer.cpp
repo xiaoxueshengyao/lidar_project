@@ -75,38 +75,38 @@ bool Viewer::InitFilter(std::string filter_user,
     
 }
 
-//关键帧更新流程
-bool Viewer::Update(std::deque<KeyFrame>& new_key_frames,                   //新关键帧
-                                            std::deque<KeyFrame>& optimized_key_frames,       //优化后
-                                            PoseData transformed_data,                        //位姿数据
-                                            CloudData cloud_data){                            //点云数据
-    ResetParam();
+// //关键帧更新流程
+// bool Viewer::Update(std::deque<KeyFrame>& new_key_frames,                   //新关键帧
+//                                             std::deque<KeyFrame>& optimized_key_frames,       //优化后
+//                                             PoseData transformed_data,                        //位姿数据
+//                                             CloudData cloud_data){                            //点云数据
+//     ResetParam();
 
-    if(optimized_key_frames.size() > 0){
-        optimized_key_frames_ = optimized_key_frames;
-        optimized_key_frames.clear();
-        OptimizeKeyFrames();
-        has_new_local_map_ = true;
-        std::cout<<"优化一次"<<std::endl;
-    }
+//     if(optimized_key_frames.size() > 0){
+//         optimized_key_frames_ = optimized_key_frames;
+//         optimized_key_frames.clear();
+//         OptimizeKeyFrames();
+//         has_new_local_map_ = true;
+//         std::cout<<"优化一次"<<std::endl;
+//     }
 
-    //添加新关键帧
-    if(new_key_frames.size()){
-        all_key_frames_.insert(all_key_frames_.end(),new_key_frames.begin(),new_key_frames.end());
-        new_key_frames.clear();
-        has_new_local_map_ = true;
-    }
+//     //添加新关键帧
+//     if(new_key_frames.size()){
+//         all_key_frames_.insert(all_key_frames_.end(),new_key_frames.begin(),new_key_frames.end());
+//         new_key_frames.clear();
+//         has_new_local_map_ = true;
+//     }
 
-    optimized_odom_ = transformed_data;
-    optimized_odom_.pose = pose_to_optimize_ * optimized_odom_.pose;//???
-    std::cout<<"需要把点云转过去的位姿"<<"\n"<<optimized_odom_.pose<<std::endl;
+//     optimized_odom_ = transformed_data;
+//     optimized_odom_.pose = pose_to_optimize_ * optimized_odom_.pose;//???
+//     std::cout<<"需要把点云转过去的位姿"<<"\n"<<optimized_odom_.pose<<std::endl;
 
-    optimized_cloud_ = cloud_data;
-    pcl::transformPointCloud(*cloud_data.cloud_ptr,*optimized_cloud_.cloud_ptr,optimized_odom_.pose);
+//     optimized_cloud_ = cloud_data;
+//     pcl::transformPointCloud(*cloud_data.cloud_ptr,*optimized_cloud_.cloud_ptr,optimized_odom_.pose);
 
-    return true;
+//     return true;
 
-}
+// }
 
 
 
@@ -114,6 +114,55 @@ void Viewer::ResetParam(){
     has_new_global_map_ = false;
     has_new_local_map_ = false;
 }
+
+
+//更新优化后位姿
+bool Viewer::UpdateWithOptimizedKeyFrames(std::deque<KeyFrame>& optimized_key_frames){
+    //进入后就设为false
+    has_new_global_map_ = false;
+
+    if(optimized_key_frames.size()>0){
+        optimized_key_frames_ = optimized_key_frames;//赋值给类内定义的全局位姿存储容器
+        optimized_key_frames.clear();
+        OptimizeKeyFrames();
+        has_new_global_map_ = true;
+    }    
+
+    return has_new_global_map_;
+
+
+}
+
+
+//局部地图更新，不再使用未优化的
+bool Viewer::UpdateWithNewKeyFrame(std::deque<KeyFrame>& new_key_frames,
+                                   PoseData transformed_data,
+                                   CloudData cloud_data){
+    has_new_local_map_ = false;
+    if(new_key_frames.size() > 0){
+        KeyFrame key_frame;
+        for(size_t i=0; i<new_key_frames.size(); i++){
+            key_frame = new_key_frames.at(i);
+            key_frame.pose = pose_to_optimize_ * key_frame.pose;//???????????????????????????
+            all_key_frames_.push_back(key_frame);
+        }
+        new_key_frames.clear();
+        has_new_local_map_ = true;
+    }
+    optimized_odom_ = transformed_data;
+    optimized_odom_.pose = pose_to_optimize_ * optimized_odom_.pose;//???????????????????????????
+
+    //当前帧点云转换到全局
+    optimized_cloud_ = cloud_data;
+    pcl::transformPointCloud(*cloud_data.cloud_ptr,*optimized_cloud_.cloud_ptr,optimized_odom_.pose);
+    // std::cout<<"更新局部地图"<<std::endl;
+    return true;
+
+
+
+
+}
+
 
 //关键帧位姿优化更新
 bool Viewer::OptimizeKeyFrames(){
@@ -147,12 +196,14 @@ bool Viewer::OptimizeKeyFrames(){
 }
 
 
-
+//优化后的位姿作为点云拼接的原始数据
 bool Viewer::JointGlobalMap(CloudData::CloudPtr& global_map_ptr){
     JointCloudMap(optimized_key_frames_,global_map_ptr);
     return true;
 }
 
+
+//局部地图拼接，就20帧
 bool Viewer::JointLocalMap(CloudData::CloudPtr& local_map_ptr){
     size_t begin_index = 0;
     if(all_key_frames_.size() > (size_t)local_frame_num_){
@@ -178,8 +229,8 @@ bool Viewer::JointCloudMap(const std::deque<KeyFrame>& key_frames,CloudData::Clo
     std::string file_path = "";
     for(size_t i=0; i<key_frames.size();i++){
         file_path = key_frames_path_+"/key_frame_"+std::to_string(key_frames.at(i).index) + ".pcd";
-        pcl::io::loadPCDFile(file_path,*cloud_ptr);
-        pcl::transformPointCloud(*cloud_ptr,*cloud_ptr,key_frames.at(i).pose);
+        pcl::io::loadPCDFile(file_path,*cloud_ptr);//读入存到内存的点云
+        pcl::transformPointCloud(*cloud_ptr,*cloud_ptr,key_frames.at(i).pose);//全都转移到全局
         *map_cloud_ptr += *cloud_ptr;
     }
 
@@ -188,6 +239,7 @@ bool Viewer::JointCloudMap(const std::deque<KeyFrame>& key_frames,CloudData::Clo
 
 }
 
+//保存地图
 bool Viewer::SaveMap(){
     if(optimized_key_frames_.size() == 0){
         return false;
@@ -195,6 +247,7 @@ bool Viewer::SaveMap(){
 
     CloudData::CloudPtr global_map_ptr(new CloudData::CloudPointT);
     JointCloudMap(optimized_key_frames_,global_map_ptr);
+
     std::string map_file_path = map_path_ + "/map.pcd";
     pcl::io::savePCDFileBinary(map_file_path,*global_map_ptr);
 

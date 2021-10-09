@@ -19,10 +19,17 @@ namespace lidar_project{
 class Viewer{
     public:
         Viewer();
-        bool Update(std::deque<KeyFrame>& new_key_frames,       //关键帧队列
-                    std::deque<KeyFrame>& optimized_key_frames,           //优化后
-                    PoseData transformed_data,
-                    CloudData cloud_data);
+        // bool Update(std::deque<KeyFrame>& new_key_frames,       //关键帧队列
+        //             std::deque<KeyFrame>& optimized_key_frames,           //优化后
+        //             PoseData transformed_data,
+        //             CloudData cloud_data);
+        //添加后端优化后，使用新的函数来更新和显示优化后的位姿
+        bool UpdateWithOptimizedKeyFrames(std::deque<KeyFrame>& optimized_key_frames);
+        bool UpdateWithNewKeyFrame(std::deque<KeyFrame>& new_key_frames,
+                                   PoseData transformed_data,
+                                   CloudData cloud_data);
+
+
         bool SaveMap();
         Eigen::Matrix4f& GetCurrentPose();
         CloudData::CloudPtr& GetCurrentScan();
@@ -43,8 +50,7 @@ class Viewer{
         bool OptimizeKeyFrames();
         bool JointGlobalMap(CloudData::CloudPtr& global_map_ptr);
         bool JointLocalMap(CloudData::CloudPtr& local_map_ptr);
-        bool JointCloudMap(const std::deque<KeyFrame>& key_frames,
-                                                    CloudData::CloudPtr& map_cloud_ptr);
+        bool JointCloudMap(const std::deque<KeyFrame>& key_frames,CloudData::CloudPtr& map_cloud_ptr);
 
     private:
         std::string data_path_ = "";
@@ -59,7 +65,8 @@ class Viewer{
         std::shared_ptr<CloudFilterInterface> global_map_filter_ptr_;
 
         Eigen::Matrix4f pose_to_optimize_ = Eigen::Matrix4f::Identity();
-        PoseData optimized_odom_;//当前数据
+        //当前位姿数据
+        PoseData optimized_odom_;
         CloudData optimized_cloud_;//当前点云012
         
         std::deque<KeyFrame> optimized_key_frames_;

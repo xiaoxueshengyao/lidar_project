@@ -29,6 +29,8 @@ class BackEndFlow{
         BackEndFlow(ros::NodeHandle& nh);
         bool Run();
 
+        bool ForceOptimize();//调用优化
+
     private:
         bool ReadData();
         bool HasData();
@@ -48,7 +50,7 @@ class BackEndFlow{
         std::shared_ptr<BackEnd> back_end_ptr_;
 
         std::deque<CloudData> cloud_data_buff_;
-        std::deque<PoseData,Eigen::aligned_allocator<PoseData>> gnss_pose_data_buff_;
+        std::deque<PoseData,Eigen::aligned_allocator<PoseData>> gnss_pose_data_buff_;//Eigen内存对齐与std标准容器
         std::deque<PoseData,Eigen::aligned_allocator<PoseData>> laser_odom_data_buff_;
 
         PoseData current_gnss_pose_data_;

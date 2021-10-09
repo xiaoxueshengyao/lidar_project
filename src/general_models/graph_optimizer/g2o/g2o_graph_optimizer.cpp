@@ -56,7 +56,7 @@ bool G2oGraphOptimizer::Optimize(){
 
     double chi2 = graph_ptr_->chi2();//chi2是最小二乘问题中该边的代价，
     int iterations = graph_ptr_->optimize(max_iteration_num_);//开始优化
-    LOG(INFO) << std::endl <<"----- 完成第 "<<"次后端优化 ----"<<std::endl;
+    LOG(INFO) << std::endl <<"----- 完成第 "<<"次后端优化 ----"<<std::endl
               << "顶点数: "<<graph_ptr_->vertices().size() << ", 边数"<<graph_ptr_->edges().size() << std::endl
               <<"迭代次数: "<<iterations <<" / "<<max_iteration_num_<<std::endl
               <<"耗时： "<<optimize_time.toc()<<std::endl
@@ -97,7 +97,7 @@ void G2oGraphOptimizer::AddSe3Node(const Eigen::Isometry3d& pose,bool need_fix){
 
 
 //鲁棒核函数选择
-void G2oGraphOptimizer::SetEdgeRobustKernel(std::string robuts_kernel_name,double robust_kernel_size){
+void G2oGraphOptimizer::SetEdgeRobustKernel(std::string robust_kernel_name,double robust_kernel_size){
     robust_kernel_name_ = robust_kernel_name;
     robust_kernel_size_ = robust_kernel_size;
     need_robust_kernel_ = true;
@@ -160,7 +160,7 @@ void G2oGraphOptimizer::AddSe3PriorXYZEdge(int se3_vertex_index,
                                            const Eigen::Vector3d& xyz,
                                            Eigen::VectorXd noise){
     Eigen::MatrixXd information_matrix = CalculateDiagMatrix(noise);
-    g2o::VertexSE3* *v_se3 = dynamic_cast<g2o::VertexSE3*>(graph_ptr_->vertex(se3_vertex_index));
+    g2o::VertexSE3* v_se3 = dynamic_cast<g2o::VertexSE3*>(graph_ptr_->vertex(se3_vertex_index));
     g2o::EdgeSE3PriorXYZ* edge(new g2o::EdgeSE3PriorXYZ());
     edge->setMeasurement(xyz);
     edge->setInformation(information_matrix);
@@ -169,7 +169,7 @@ void G2oGraphOptimizer::AddSe3PriorXYZEdge(int se3_vertex_index,
     
 }
 
-
+//添加姿态先验边
 void G2oGraphOptimizer::AddSe3PriorQuaternionEdge(int se3_vertex_index,
                                        const Eigen::Quaterniond& quat,//姿态作为先验边
                                        Eigen::VectorXd noise){

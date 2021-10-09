@@ -6,6 +6,17 @@ key_frame_distance: 2.0
 
 
 #优化条件
-optimize_step_with_none: 100	#每隔100步优化一次
-optimize_step_with_gnss: 100	#有gnss时也100次优化一次
-optimize_step_with_loop: 10	#有10次回环时优化一次
+optimize_step_with_key_frame: 100	#每隔100步优化一次
+optimize_step_with_gnss: 200	#有gnss时也100次优化一次
+optimize_step_with_loop: 100	#有10次回环时优化一次
+
+#优化库选择
+graph_optimizer_type: g2o
+use_gnss: true
+use_loop_close: false
+
+#优化参数，噪声--信息矩阵
+g2o_param:
+  odom_edge_noise: [0.5, 0.5, 0.5, 0.001, 0.001, 0.001] # 噪声 x y z yaw roll pitch 
+  close_loop_noise: [2.0, 2.0, 2.0, 0.01, 0.01, 0.01]   # x y z yaw roll pitch
+  gnss_noise: [2.0, 2.0, 2.0] # x y z
