@@ -1,4 +1,4 @@
-# noted code
+﻿# noted code
 参考任大佬的知乎和git，做一些简单注释和理解，向大佬学习。参考如下：
 
 https://zhuanlan.zhihu.com/p/104791974
@@ -34,3 +34,6 @@ https://blog.csdn.net/CaptainYJJ/article/details/120012332?spm=1001.2014.3001.55
 
 3、glog库、地理信息库、yaml-cpp库均可自行安装
 yaml如果源码安装，编译可能会出现问题，是因为ubuntu本身有yaml库，卸载掉就好
+
+4、使用g2o作为后端，建图效果明显优化，结果如下所示
+
