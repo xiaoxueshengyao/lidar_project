@@ -37,3 +37,5 @@ yaml如果源码安装，编译可能会出现问题，是因为ubuntu本身有y
 
 4、使用g2o作为后端，建图效果明显优化，结果如下所示
 
+![建图1_proc](https://user-images.githubusercontent.com/33504360/136660507-8017a669-e28c-4add-99f0-b702093ecc0b.jpg)
+![建图2_proc](https://user-images.githubusercontent.com/33504360/136660515-9445e025-9d37-42d4-a431-55a4fa8ee6bf.jpg)
