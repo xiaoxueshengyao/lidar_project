@@ -62,7 +62,7 @@ bool G2oGraphOptimizer::Optimize(){
               <<"耗时： "<<optimize_time.toc()<<std::endl
               <<"优化后误差变化："<<chi2 <<"---> "<< graph_ptr_->chi2()
               << std::endl <<std::endl;
-
+`
     return true;
 
 }

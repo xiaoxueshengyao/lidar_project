@@ -22,7 +22,7 @@ void CloudPublisher::Publish(CloudData::CloudPtr& cloud_ptr, double time){
 void CloudPublisher::Publish(CloudData::CloudPtr& cloud_ptr){
     ros::Time time = ros::Time::now();
     PublishData(cloud_ptr,time);
-    std::cout<<"当前点云数据已发布"<<std::endl;
+    
 
 }
 

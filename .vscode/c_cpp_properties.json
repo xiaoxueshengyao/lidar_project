@@ -4,11 +4,12 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/usr/local/include/pcl-1.9",
+                "/usr/local/include/pcl",
+                "/usr/include/pcl-1.7",
                 "/opt/ros/melodic/include/**",
                 "${workspaceFolder}/include",
                 "/opt/ros/melodic/include",
-                "/usr/locla/include/g2o"
+                "/usr/local/include/g2o"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",

@@ -76,6 +76,13 @@ include_directories( "/usr/include/eigen3" )
 #include_directories("third_party/eigen3")
 include_directories(include ${catkin_INCLUDE_DIRS})
 
+#工作空间设定
+configure_file(
+  ${PROJECT_SOURCE_DIR}/include/tools/global_path.h
+  ${PROJECT_SOURCE_DIR}/include/tools/global_path.h
+)
+#include_directories(${PROJECT_BINARY_DIR}/include)
+
 
 catkin_package(
 CATKIN_DEPENDS roscpp sensor_msgs std_msgs message_runtime
@@ -100,13 +107,7 @@ list(REMOVE_ITEM ALL_SRCS ${APP_SRCS})
 
 #add_executable(front_end app/front_test.cpp src/kitti_data.cpp src/tf_listener.cpp src/front_end_back.cpp)
 #target_link_libraries(front_end ${catkin_LIBRARIES} 
-#${PCL_LIBRARIES} ${Eigen_LIBRARIES} ${GeographicLib_LIBRARIES} glog::glog)
-
-#add_executable(front_end_node app/front_end_node.cpp ${ALL_SRCS} )#src/general_models/file_manager/file_manager.cpp) 
-#add_dependencies(front_end_node ${catkin_EXPORTED_TARGETS} saveMap_gencpp)
-#target_link_libraries(front_end_node ${catkin_LIBRARIES} ${YAML_CPP_LIBRARIES} ${PCL_LIBRARIES} ${Eigen_LIBRARIES} ${GeographicLib_LIBRARIES} glog::glog )
-
-#测试数据
+#${PCL_LIBRARIES} ${Eigen_LIBRA/home/jingwan/lslidar_ws/src
 add_executable(test_frame_node app/test_frame.cpp ${ALL_SRCS})
 target_link_libraries(test_frame_node ${catkin_LIBRARIES} ${ALL_TARGET_LIBRARIES} glog)
 

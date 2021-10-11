@@ -191,7 +191,7 @@ bool BackEnd::AddNodeAndEdge(const PoseData& gnss_data){
     std::cout<<"The graph has "<<new_key_frame_cnt_<<" key frames"<<std::endl;
 
     //添加激光里程计对应的边
-    //添加了先验边，所以第一个节点fix不需要设置为true,否则会冲突
+    //由于添加了先验边，所以第一个节点fix不需要设置为true,否则会冲突
     static KeyFrame last_key_frame = current_key_frame_;//静态局部变量，使值数据持久
     int node_num = graph_optimizer_ptr_->GetNodeNum();
     if(node_num > 1){
