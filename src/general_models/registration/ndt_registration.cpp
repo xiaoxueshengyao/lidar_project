@@ -40,7 +40,10 @@ bool NDTRegistration::SetInputTarget(const CloudData::CloudPtr& input_tatget){
 }
 
 /***
- * 点云配准，设定输入源点云，预测位姿（初始位姿）
+ * 点云配准
+ * INPUT:设定输入源点云，预测位姿（初始位姿）
+ * OUTPUT:result_cloud_ptr--源点云配准后的位置
+ *        result_pose--转换位姿
 ***/
 bool NDTRegistration::ScanMatch(const CloudData::CloudPtr& input_source, 
                                 const Eigen::Matrix4f& predict_pose,

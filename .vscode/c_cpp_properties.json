@@ -6,7 +6,7 @@
                 "${workspaceFolder}/**",
                 "/usr/local/include/pcl",
                 "/usr/include/pcl-1.7",
-                "/opt/ros/melodic/include/**",
+                "/opt/ros/kinetic/include/**",
                 "${workspaceFolder}/include",
                 "/opt/ros/melodic/include",
                 "/usr/local/include/g2o"

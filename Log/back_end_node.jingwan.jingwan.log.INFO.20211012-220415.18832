@@ -1,0 +1,7 @@
+Log file created at: 2021/10/12 22:04:15
+Running on machine: jingwan
+Running duration (h:mm:ss): 0:00:00
+Log line format: [IWEF]yyyymmdd hh:mm:ss.uuuuuu threadid file:line] msg
+I20211012 22:04:15.967450 18832 file_manager.cpp:29] 关键帧点云 存放地址: 
+/home/jingwan/lslidar_ws/src/lidar_project/slam_data/key_frames
+

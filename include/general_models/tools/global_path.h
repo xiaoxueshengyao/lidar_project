@@ -11,7 +11,7 @@
 namespace lidar_project{
 //这个会定位到src底下对应的功能包里
 //比如这个程序就会定位到  /home/jingwan/lslidar_ws/src/lidar_project
-const std::string WORK_SPACE_PATH = "@WORK_SPACE_PATH@";
+const std::string WORK_SPACE_PATH = "";
 
 }
 

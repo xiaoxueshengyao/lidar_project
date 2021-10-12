@@ -1,0 +1,28 @@
+#回环配置文件
+#数据存储
+data_path: ./
+
+registration_method: NDT #配准方法
+# 回环时采用scan-to-map
+# map是以待匹配历史帧为中心加上附近几个历史帧拼接而成的
+extend_frame_num: 5
+loop_step: 5 #防止检测过于频繁，每隔loop_step个关键帧闭环检测一次
+detect_area: 10.0 #闭环检测阈值，两帧相差这个值再做闭环比配
+diff_num: 100 #过于近的闭环没有意义，远一点
+fitness_score_limit: 0.2 #匹配误差小于这个值认为是有效回环
+
+#用于回环时的点云对计算时间要求不高，可以用稠密的，就不用滤波了
+map_filter: voxel_filter
+scan_filter: voxel_filter
+
+NDT:
+  res : 1.0
+  step_size: 0.1
+  trans_eps: 0.01
+  max_iter: 30
+
+voxel_filter:
+  map:
+    leaf_size: [0.3,0.3,0.3]
+  scan:
+    leaf_size: [0.3,0.3,0.3]

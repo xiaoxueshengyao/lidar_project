@@ -22,7 +22,7 @@ class KeyFrameSubscriber{
         void ParseData(std::deque<KeyFrame>& key_frame_buff);
 
     private:
-        void msg_callback(const geometry_msgs::PoseStampedConstPtr& key_frame_msg_ptr);//注意这里的回调函数与frams_sub.hpp里面的参数不同
+        void msg_callback(const geometry_msgs::PoseStampedConstPtr& key_frame_msg_ptr);//注意这里的回调函数与frames_sub.hpp里面的参数不同
 
     private:
         ros::NodeHandle nh_;

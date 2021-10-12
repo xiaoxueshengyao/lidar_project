@@ -6,7 +6,7 @@
 #ifndef NO_FILTER_HPP_
 #define NO_FILTER_HPP_
 
-#include "cloud_filter/filter_interface.hpp"
+#include "general_models/cloud_filter/filter_interface.hpp"
 
 namespace lidar_project{
 class NoFilter : public CloudFilterInterface{
@@ -17,11 +17,4 @@ class NoFilter : public CloudFilterInterface{
 };
 
 }
-
-
-
-
-
-
-
 #endif

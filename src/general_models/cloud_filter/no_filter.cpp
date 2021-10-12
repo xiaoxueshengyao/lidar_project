@@ -8,7 +8,9 @@
 
 namespace lidar_project{
 //构造函数，啥也不干
-NoFilter::NoFilter(){}
+NoFilter::NoFilter(){
+    
+}
 
 /***
  * Description:不滤波，酒把输入点云赋值给输出点云指针

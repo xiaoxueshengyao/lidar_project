@@ -5,7 +5,7 @@ set(CMAKE_BUILD_TYPE "Debug")
 set(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
 add_compile_options(-std=c++11)
 add_definitions(-std=c++11)
-set(CMAKE_CXX_STANDARD 14)
+# set(CMAKE_CXX_STANDARD 14)
 
 
 find_package(catkin REQUIRED COMPONENTS
@@ -78,10 +78,10 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 
 #工作空间设定
 configure_file(
-  ${PROJECT_SOURCE_DIR}/include/tools/global_path.h
-  ${PROJECT_SOURCE_DIR}/include/tools/global_path.h
+  ${PROJECT_SOURCE_DIR}/include/general_models/tools/global_path.h.in
+  ${PROJECT_SOURCE_DIR}/include/general_models/tools/global_path.h
 )
-#include_directories(${PROJECT_BINARY_DIR}/include)
+include_directories(${PROJECT_BINARY_DIR}/include)
 
 
 catkin_package(
@@ -133,3 +133,7 @@ add_executable(viewer_node app/viewer_node.cpp ${ALL_SRCS})
 add_dependencies(viewer_node ${catkin_EXPORTED_TARGETS} saveMap_gencpp)
 target_link_libraries(viewer_node ${catkin_LIBRARIES} ${ALL_TARGET_LIBRARIES} glog)
 
+#回环节点
+add_executable(loop_closing_node app/loop_closing_node.cpp ${ALL_SRCS})
+add_dependencies(loop_closing_node ${catkin_EXPORTED_TARGETS} )
+target_link_libraries(loop_closing_node ${catkin_LIBRARIES} ${ALL_TARGET_LIBRARIES} glog)

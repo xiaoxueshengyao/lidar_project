@@ -12,7 +12,6 @@
 
 #include "general_models/registration/ndt_registration.hpp"
 #include "general_models/cloud_filter/voxel_filter.hpp"
-#include "general_models/cloud_filter/"
 #include "general_models/tools/print_info.hpp"
 #include "general_models/cloud_filter/no_filter.hpp"
 
@@ -21,14 +20,14 @@
 namespace lidar_project{
 
 //构造函数初始化参数
-LoopCLosing::LoopClosing(){
+LoopClosing::LoopClosing(){
     InitWithConfig();
 }
 
 
 //使用yaml初始化各类参数
 bool LoopClosing::InitWithConfig(){
-    std::string config_file_path = WORK_SPACE_PATH + "/config/LoopClosing.yaml";
+    std::string config_file_path = WORK_SPACE_PATH + "/config/LoopClosingConfig.yaml";
     YAML::Node config_node = YAML::LoadFile(config_file_path);
 
     std::cout<<">>>>>>>>>>>闭环检测初始化<<<<<<<<<<<<<"<<std::endl;
@@ -47,7 +46,7 @@ bool LoopClosing::InitParam(const YAML::Node& config_node){
     loop_step_ = config_node["loop_step"].as<int>();
     diff_num_ = config_node["diff_num"].as<int>();
     detect_area_ = config_node["detect_area"].as<float>();
-    fitness_score_limit_ = config["fitness_score_limit"].as<float>();
+    fitness_score_limit_ = config_node["fitness_score_limit"].as<float>();
 
     return true;
 }
@@ -55,10 +54,10 @@ bool LoopClosing::InitParam(const YAML::Node& config_node){
 
 //初始化路径
 bool LoopClosing::InitDataPath(const YAML::Node& config_node){
-    std::string data_path = config_node["data_path"].as<std:string>();
+    std::string data_path = config_node["data_path"].as<std::string>();
 
-    if(data_pata == "./"){
-        data_path = WORK_SAPCE_PATH;
+    if(data_path == "./"){
+        data_path = WORK_SPACE_PATH;
     }
 
     key_frames_path_ = data_path + "/slam_data/key_frames";
@@ -75,7 +74,7 @@ bool LoopClosing::InitRegistration(std::shared_ptr<RegistrationInterface>& regis
     if(registration_method == "NDT"){
         registration_ptr = std::make_shared<NDTRegistration>(config_node[registration_method]);
     }else{
-        LOG(ERROR)<<"未找到匹配的滤波方法"<< registration_method<<;
+        LOG(ERROR)<<"未找到匹配的滤波方法"<< registration_method<<std::endl;
         return false;
     }
 
@@ -123,7 +122,10 @@ bool LoopClosing::Update(const KeyFrame key_frame, const KeyFrame key_gnss){
 }
 
 
-//寻找回环
+
+/* 寻找回环
+ * OUTPUT:找到的回环历史帧的索引
+ * ***/
 bool LoopClosing::DetectNearestKeyFrame(int& key_frame_index){
     static int skip_cnt = 0;
     static int skip_num = loop_step_;
@@ -147,7 +149,7 @@ bool LoopClosing::DetectNearestKeyFrame(int& key_frame_index){
         if(key_num - i < diff_num_)
             break;//对100帧之前的历史帧进行检测
 
-        history_key_frame = all_keyy_gnss_.at(i);
+        history_key_frame = all_key_gnss_.at(i);
         distance = fabs(current_key_frame.pose(0,3) - history_key_frame.pose(0,3)) + 
                    fabs(current_key_frame.pose(1,3) - history_key_frame.pose(1,3)) + 
                    fabs(current_key_frame.pose(2,3) - history_key_frame.pose(2,3));
@@ -198,7 +200,13 @@ bool LoopClosing::CloudRegistration(int key_frame_index){
 }
 
 
-//构建匹配到的历史帧局部地图
+
+/***
+ * 构建匹配到的历史帧局部地图
+ * INPUT:历史帧索引--key_frame_index
+ *       历史帧位姿--map_pose
+ * OUTPUT:map_cloud_ptr --以历史帧为中心融合而得的局部点云地图，用于做当前帧与历史帧的点云配准
+ * ***/
 bool LoopClosing::JointMap(int key_frame_index,                 //匹配到的历史帧索引
                            CloudData::CloudPtr& map_cloud_ptr,  //融合后的局部点云
                            Eigen::Matrix4f& map_pose){          //历史帧位姿
@@ -210,7 +218,7 @@ bool LoopClosing::JointMap(int key_frame_index,                 //匹配到的�
     Eigen::Matrix4f pose_to_gnss = map_pose * all_key_frames_.at(key_frame_index).pose.inverse();
 
     for(int i = key_frame_index - extend_frame_num_; i<key_frame_index + extend_frame_num_; i++){
-        std::string file_path = key_frame_path + "/key_frame_"+std::to_string(all_key_frames_.at(i).index)+".pcd";
+        std::string file_path = key_frames_path_ + "/key_frame_"+std::to_string(all_key_frames_.at(i).index)+".pcd";
 
         CloudData::CloudPtr cloud_ptr(new CloudData::CloudPointT());
         pcl::io::loadPCDFile(file_path,*cloud_ptr);//载入数据
@@ -225,8 +233,11 @@ bool LoopClosing::JointMap(int key_frame_index,                 //匹配到的�
     return true;
 }
 
-
-//当前帧获取
+/***
+ * 当前帧获取
+ * OUTPUT:当前帧点云--scan_cloud_ptr
+ *        当前帧位姿--scan_pose
+ * ***/
 bool LoopClosing::JointScan(CloudData::CloudPtr& scan_cloud_ptr, Eigen::Matrix4f& scan_pose){
     scan_pose = all_key_gnss_.back().pose;
     current_loop_pose_.index1 = all_key_frames_.back().index;//当前帧
@@ -239,7 +250,14 @@ bool LoopClosing::JointScan(CloudData::CloudPtr& scan_cloud_ptr, Eigen::Matrix4f
     return true;
 }
 
-//点云匹配
+
+/***
+* Description:点云配准
+* INPUT: map_cloud_ptr--历史帧局部点云
+         scan_cloud_ptr -- 当前帧点云
+         scan_pose -- 当前帧位姿
+* OUTPUT:转换位姿
+***/
 bool LoopClosing::Registration(CloudData::CloudPtr& map_cloud_ptr,
                                CloudData::CloudPtr& scan_cloud_ptr,
                                Eigen::Matrix4f& scan_pose,
