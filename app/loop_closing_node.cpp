@@ -14,7 +14,7 @@ using namespace lidar_project;
 int main(int argc, char** argv){
 
     google::InitGoogleLogging(argv[0]);
-    FLAGS_log_dir = WORK_SPACE_PATH + "Log";
+    FLAGS_log_dir = WORK_SPACE_PATH + "/Log";
     FLAGS_alsologtostderr = 1;
 
     ros::init(argc,argv,"loop_closing_node");

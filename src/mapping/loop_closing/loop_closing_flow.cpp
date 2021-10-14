@@ -5,6 +5,7 @@
 
 #include "mapping/loop_closing/loop_closing_flow.hpp"
 #include "general_models/tools/global_path.h"
+#include "glog/logging.h"
 
 namespace lidar_project{
 
@@ -26,8 +27,8 @@ LoopClosingFlow::LoopClosingFlow(ros::NodeHandle& nh){
 
 bool LoopClosingFlow::Run(){
     if(!ReadData())
-        false;
-    while (HasData())
+        return false;
+    while(HasData())
     {
         if(!ValidData())
             continue;

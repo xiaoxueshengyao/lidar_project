@@ -12,6 +12,7 @@
 
 #include "general_models/file_manager/file_manager.hpp"
 #include "glog/logging.h"
+#include "general_models/tools/global_path.h"
 
 
 namespace lidar_project{
@@ -23,12 +24,14 @@ BackEndFlow::BackEndFlow(ros::NodeHandle& nh){
     // laser_odom_sub_ptr_ = std::make_shared<OdometrySubscriber>(nh,"laser_odom",100000);
     gnss_pose_sub_ptr_ = std::shared_ptr<OdometrySubscriber>(new OdometrySubscriber(nh,"/synced_gnss",100000));
     laser_odom_sub_ptr_ = std::shared_ptr<OdometrySubscriber>(new OdometrySubscriber(nh,"/laser_odom",100000));
+    loop_pose_sub_ptr_ = std::make_shared<LoopPoseSubscriber>(nh,"/loop_pose",100000);//回环数据订阅指针
 
     //发布优化后的位姿
     // transformed_odom_pub_ptr_ = std::make_shared<OdometryPublisher>(nh,"transformed_odom","/map","/lidar",100);
     // key_frame_pub_ptr_ = std::make_shared<KeyFramePublisher>(nh,"/key_frame","map",100);
     transformed_odom_pub_ptr_ = std::shared_ptr<OdometryPublisher>(new OdometryPublisher(nh, "/transformed_odom", "/map", "/lidar", 100));
     key_frame_pub_ptr_ = std::shared_ptr<KeyFramePublisher>(new KeyFramePublisher(nh,"/key_frame", "/map",100));
+    key_gnss_pub_ptr_ = std::make_shared<KeyFramePublisher>(nh,"/key_gnss","/map",100);
     //优化后的关键帧位姿
     // key_frames_pub_ptr_ = std::make_shared<KeyFramesPublisher>(nh,"/optimized_key_frames","map",100);
     key_frames_pub_ptr_ = std::shared_ptr<KeyFramesPublisher>(new KeyFramesPublisher(nh,"/optimized_key_frames", "/map",100));
@@ -43,8 +46,9 @@ BackEndFlow::BackEndFlow(ros::NodeHandle& nh){
 bool BackEndFlow::Run(){
     if(!ReadData())
         return false;
+    MaybeInsertLoopPose();
     
-    while (HasData())
+    while(HasData())
     {
         if(!ValidData())
             continue;
@@ -67,16 +71,26 @@ bool BackEndFlow::ForceOptimize(){
     return true;
 }
 
-
+//数据订阅后获取
 bool BackEndFlow::ReadData(){
     cloud_sub_ptr_->ParaData(cloud_data_buff_); //都放到deque中
     gnss_pose_sub_ptr_->ParseData(gnss_pose_data_buff_);
     laser_odom_sub_ptr_->ParseData(laser_odom_data_buff_);
 
+    loop_pose_sub_ptr_->ParseData(loop_pose_data_buff_);
+
     return true;
 
 }
 
+//判断是否需要插入回环位姿
+bool BackEndFlow::MaybeInsertLoopPose(){
+    while(loop_pose_data_buff_.size()>0){
+        back_end_ptr_->InsertLoopPose(loop_pose_data_buff_.front());
+        loop_pose_data_buff_.pop_front();
+    }
+    return true;
+}
 
 //判断容器中是否有数据
 bool BackEndFlow::HasData(){
@@ -124,7 +138,7 @@ bool BackEndFlow::ValidData(){
     return true;
 }
 
-
+//先把激光里程计数据的坐标转换到gnss的坐标系，做了对齐
 bool BackEndFlow::UpdateBackEnd(){
     static bool odometry_inited = false;
     static Eigen::Matrix4f odom_init_pose = Eigen::Matrix4f::Identity();
@@ -135,7 +149,7 @@ bool BackEndFlow::UpdateBackEnd(){
     }
     current_laser_pose_data_.pose = odom_init_pose * current_laser_pose_data_.pose;
     
-    return back_end_ptr_->Updata(current_cloud_data_,current_laser_pose_data_,current_gnss_pose_data_);
+    return back_end_ptr_->Updata(current_cloud_data_, current_laser_pose_data_, current_gnss_pose_data_);
 
 
 }
@@ -144,11 +158,15 @@ bool BackEndFlow::UpdateBackEnd(){
 bool BackEndFlow::PublishData(){
     transformed_odom_pub_ptr_->Publish(current_laser_pose_data_.pose,current_laser_pose_data_.time);
 
-    //有新关键帧时发布单个关键帧
+    //有新关键帧时发布单个关键帧及其对应gnss
     if(back_end_ptr_->HasNewKeyFrame()){
         KeyFrame key_frame;
+
         back_end_ptr_->GetLatestKeyFrame(key_frame);
         key_frame_pub_ptr_->Publish(key_frame);
+
+        back_end_ptr_->GetLatestKeyGNSS(key_frame);
+        key_gnss_pub_ptr_->Publish(key_frame);
     }
 
     //做了一次优化后，把所有关键帧都发布一次

@@ -9,7 +9,6 @@
 
 #include <deque>
 #include <ros/ros.h>
-#include <Eigen/StdDeque>
 //数据订阅
 #include "subscriber/cloud_subscriber.hpp"
 #include "subscriber/odometry_subscriber.hpp"

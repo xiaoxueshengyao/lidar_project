@@ -110,10 +110,10 @@ bool Viewer::InitFilter(std::string filter_user,
 
 
 
-void Viewer::ResetParam(){
-    has_new_global_map_ = false;
-    has_new_local_map_ = false;
-}
+// void Viewer::ResetParam(){
+//     has_new_global_map_ = false;
+//     has_new_local_map_ = false;
+// }
 
 
 //更新优化后位姿

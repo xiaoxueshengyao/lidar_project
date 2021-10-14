@@ -7,6 +7,7 @@
  * Data:0610
  * ****/
 
+#include "general_models/tools/global_path.h"
 #include "mapping/back_end/back_end.hpp"
 #include "general_models/file_manager/file_manager.hpp"
 
@@ -22,9 +23,10 @@ BackEnd::BackEnd(){
 
 //参数文件读取，包括关键帧和优化的执行条件以及轨迹文件路径
 bool BackEnd::InitWithConfig(){
-    std::string config_file_path = "/home/jingwan/lslidar_ws/src/lidar_project/config/BackEndConfig.yaml";
+    std::string config_file_path = WORK_SPACE_PATH + "/config/BackEndConfig.yaml";
     YAML::Node config_node = YAML::LoadFile(config_file_path); 
 
+    std::cout<<">>>>>>>>>>>>后端初始化<<<<<<<<<<<<<<<<<"<<std::endl;
     InitParam(config_node);
     InitDataPath(config_node);
     InitGraphOptimizer(config_node);//添加后端优化参数初始化，优化库、信息矩阵确定
@@ -74,11 +76,13 @@ bool BackEnd::InitGraphOptimizer(const YAML::Node& config_node){
 
     return true;
 }
+
+
 //各个文件路径初始化
 bool BackEnd::InitDataPath(const YAML::Node& config_node){
     std::string data_path = config_node["data_path"].as<std::string>();
     if(data_path == "./"){
-        data_path = "/home/jingwan/lslidar_ws/src/lidar_project";
+        data_path = WORK_SPACE_PATH;
     }
 
     if(!FileManager::CreateDirectory(data_path + "/slam_data")){
@@ -103,17 +107,43 @@ bool BackEnd::InitDataPath(const YAML::Node& config_node){
 }
 
 //更新里程计数据
+//添加回环后，添加位姿保存
 bool BackEnd::Updata(const CloudData& cloud_data, const PoseData& laser_odom,const PoseData& gnss_pose){
     ResetParam();
-    SaveTrajectory(laser_odom,gnss_pose);
+    // SaveTrajectory(laser_odom,gnss_pose);
 
-    if(MaybeNewKeyFrame(cloud_data,laser_odom)){
+    if(MaybeNewKeyFrame(cloud_data,laser_odom,gnss_pose)){
+        SavePose(ground_truth_ofs_,gnss_pose.pose);
+        SavePose(laser_odom_ofs_,laser_odom.pose);
         AddNodeAndEdge(gnss_pose);//插入关键帧时添加对应节点和边
-        MaybeOptimized();
+        // MaybeOptimized();
+
+        if(MaybeOptimized()){
+            SaveOptimizedPose();
+        }
     }
     return true;
 }
 
+/****
+ * DESCRIPTION:插入回环约束
+ * INPUT: loop_pose  确定了是回环的位姿，包括两帧的索引及位姿
+ * OUTPUT: 添加该回环位姿约束到g2o中，消除点云重叠
+ * ****/
+bool BackEnd::InsertLoopPose(const LoopPose& loop_pose){
+    if(!graph_optimizer_config_.use_loop_close)
+        return false;
+
+    Eigen::Isometry3d isometry;
+    isometry.matrix() = loop_pose.pose.cast<double>();
+    graph_optimizer_ptr_->AddSe3Edge(loop_pose.index0, loop_pose.index1, isometry, graph_optimizer_config_.close_loop_noise);
+
+    new_loop_cnt_++;
+    std::cout<<"插入回环： "<<loop_pose.index0<<"\t"<<loop_pose.index1<<std::endl;
+
+    return true;
+
+}
 
 
 void BackEnd::ResetParam(){
@@ -121,22 +151,17 @@ void BackEnd::ResetParam(){
     has_new_optimized_ = false;
 }
 
-
-//把里程计和真值进行保存
-bool BackEnd::SaveTrajectory(const PoseData& laser_odom, const PoseData& gnss_pose){
+//保存路径数据,这样保存的数据是矩阵
+bool BackEnd::SavePose(std::ofstream& ofs, const Eigen::Matrix4f& pose){
     for(int i=0; i<3; i++){
         for(int j=0; j<4; j++){
-            ground_truth_ofs_ << gnss_pose.pose(i,j);//按行进行存储
-            laser_odom_ofs_ << laser_odom.pose(i,j);
-            
-            if(i==2 && j==3){
-                ground_truth_ofs_ << std::endl;
-                laser_odom_ofs_ << std::endl;
-            }else{
-                ground_truth_ofs_ << " ";
-                laser_odom_ofs_ << " ";
-            }
+            ofs << pose(i,j);
 
+            if(i==2 && j==3){
+                ofs << std::endl;
+            }else{
+                ofs<<" ";
+            }
         }
     }
 
@@ -144,10 +169,36 @@ bool BackEnd::SaveTrajectory(const PoseData& laser_odom, const PoseData& gnss_po
 
 }
 
+// //把里程计和真值进行保存
+// bool BackEnd::SaveTrajectory(const PoseData& laser_odom, const PoseData& gnss_pose){
+//     for(int i=0; i<3; i++){
+//         for(int j=0; j<4; j++){
+//             ground_truth_ofs_ << gnss_pose.pose(i,j);//按行进行存储
+//             laser_odom_ofs_ << laser_odom.pose(i,j);
+            
+//             if(i==2 && j==3){
+//                 ground_truth_ofs_ << std::endl;
+//                 laser_odom_ofs_ << std::endl;
+//             }else{
+//                 ground_truth_ofs_ << " ";
+//                 laser_odom_ofs_ << " ";
+//             }
+
+//         }
+//     }
+
+//     return true;
+
+// }
 
 
-//加入关键帧判断
-bool BackEnd::MaybeNewKeyFrame(const CloudData& cloud_data,const PoseData& laser_odom){
+
+/****
+ * 加入关键帧判断,有新关键帧时保存，位姿也进行保存
+ * Input: cloud_data,laser_odom,gnss_odom
+ * Output: 关键帧点云保存文件 
+ * ***/
+bool BackEnd::MaybeNewKeyFrame(const CloudData& cloud_data,const PoseData& laser_odom, const PoseData& gnss_odom){
     static Eigen::Matrix4f last_key_pose = laser_odom.pose;//通过计算激光里程计变化设定关键帧
     if(key_frames_deque_.size() ==0 ){
         has_new_key_frame_ = true;//第一帧设为关键帧
@@ -163,7 +214,7 @@ bool BackEnd::MaybeNewKeyFrame(const CloudData& cloud_data,const PoseData& laser
 
     if(has_new_key_frame_){
         //有关键帧后把对应点云存到硬盘
-        std::string file_path = key_frames_path_ + "/key_frame_"+std::to_string(key_frames_deque_.size()) +".pcd";
+        std::string file_path = key_frames_path_ + "/key_frame_" + std::to_string(key_frames_deque_.size()) + ".pcd";
         pcl::io::savePCDFileBinary(file_path,*cloud_data.cloud_ptr);
 
         KeyFrame key_frame;
@@ -174,6 +225,11 @@ bool BackEnd::MaybeNewKeyFrame(const CloudData& cloud_data,const PoseData& laser
 
         // latest_key_frame_ = key_frame;
         current_key_frame_ = key_frame;//这里更换为当前帧
+
+        //回环添加gnss数据
+        current_key_gnss_.time = gnss_odom.time;
+        current_key_gnss_.index = key_frame.index;
+        current_key_gnss_.pose = gnss_odom.pose;
     }
 
     return has_new_key_frame_;
@@ -181,12 +237,21 @@ bool BackEnd::MaybeNewKeyFrame(const CloudData& cloud_data,const PoseData& laser
 }
 
 
-//添加观测节点和边
+
+/***
+ * DESCRIPTION: 添加观测节点和边
+ * INPUT: gnss_pose gnss位姿数据，这个输入感觉有点奇怪，看下面就明白了
+ * OUTPUT: gnss的位姿主要是添加先验边的，而节点位姿和边通过里程计计算的
+ * ***/
 bool BackEnd::AddNodeAndEdge(const PoseData& gnss_data){
     Eigen::Isometry3d isometry;
     //添加关键帧对应节点
     isometry.matrix() = current_key_frame_.pose.cast<double>();
-    graph_optimizer_ptr_->AddSe3Node(isometry,false);
+    if(!graph_optimizer_config_.use_gnss && graph_optimizer_ptr_->GetNodeNum() == 0)
+        graph_optimizer_ptr_->AddSe3Node(isometry,true);
+    else
+        graph_optimizer_ptr_->AddSe3Node(isometry,false);
+    // graph_optimizer_ptr_->AddSe3Node(isometry,false);
     new_key_frame_cnt_++;
     std::cout<<"The graph has "<<new_key_frame_cnt_<<" key frames"<<std::endl;
 
@@ -247,26 +312,57 @@ bool BackEnd::MaybeOptimized(){
     return true;
 }
 
+
+//保存优化后的位姿
+bool BackEnd::SaveOptimizedPose(){
+    if(graph_optimizer_ptr_->GetNodeNum() == 0)
+        return false;
+    
+    if(!FileManager::CreateFile(optimized_pose_ofs_,trajectory_path_+"/optimized.txt"))
+        return false;
+
+    graph_optimizer_ptr_->GetOptimizedPose(optimized_pose_);
+
+    for(size_t i=0; i<optimized_pose_.size(); i++){
+        SavePose(optimized_pose_ofs_,optimized_pose_.at(i));
+    }
+    return true;
+}
+
+
+
+
+//强制进行优化，最后几帧来不及数据没有了，强制优化把最后几帧数据也包含进去
 bool BackEnd::ForceOptimize(){
     if(graph_optimizer_ptr_->Optimize())
         has_new_optimized_ = true;
+
+
+    SaveOptimizedPose();//回环添加
     return has_new_optimized_;
 }
 
-void BackEnd::GetOptimizedKeyFrames(std::deque<KeyFrame>& key_frames_deque){
 
-    // key_frames_deque = key_frames_deque_;
-    key_frames_deque.clear();
-    if(graph_optimizer_ptr_->GetNodeNum() > 0){
-        std::deque<Eigen::Matrix4f> optimized_pose;
-        graph_optimizer_ptr_->GetOptimizedPose(optimized_pose);
-        KeyFrame key_frame;
-        for(size_t i=0; i<optimized_pose.size(); i++){
-            key_frame.pose = optimized_pose.at(i);
-            key_frame.index = (unsigned int)i;
-            key_frames_deque.push_back(key_frame);
-        }
+//OUTPUT: 从graph中获取优化后的位姿
+void BackEnd::GetOptimizedKeyFrames(std::deque<KeyFrame>& key_frames_deque){
+    KeyFrame key_frame;
+    for(size_t i=0; i<optimized_pose_.size(); i++){
+        key_frame.pose = optimized_pose_.at(i);
+        key_frame.index = (unsigned int)i;
+        key_frames_deque.push_back(key_frame);
     }
+    // key_frames_deque = key_frames_deque_;
+    // key_frames_deque.clear();
+    // if(graph_optimizer_ptr_->GetNodeNum() > 0){
+    //     std::deque<Eigen::Matrix4f> optimized_pose;
+    //     graph_optimizer_ptr_->GetOptimizedPose(optimized_pose);
+    //     KeyFrame key_frame;
+    //     for(size_t i=0; i<optimized_pose.size(); i++){
+    //         key_frame.pose = optimized_pose.at(i);
+    //         key_frame.index = (unsigned int)i;
+    //         key_frames_deque.push_back(key_frame);
+    //     }
+    // }
 }
 
 bool BackEnd::HasNewKeyFrame(){
@@ -283,6 +379,10 @@ void BackEnd::GetLatestKeyFrame(KeyFrame& key_frame){
 
     // key_frame = latest_key_frame_;
     key_frame = current_key_frame_;
+}
+
+void BackEnd::GetLatestKeyGNSS(KeyFrame& key_frame){
+    key_frame = current_key_gnss_;
 }
 
 }

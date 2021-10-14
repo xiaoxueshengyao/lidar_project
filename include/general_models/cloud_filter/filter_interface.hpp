@@ -8,7 +8,8 @@
 #define FILTER_INTERFACE_HPP_
 
 #include "kitti_data/cloud_data.hpp"
-#include <yaml-cpp/yaml.h>//yaml文件读参数，放在外面方便改写,不用总是修改源文件
+#include <yaml-cpp/yaml.h>//yaml文件读参数，放在外面方便改写,不用总是修改源文件。
+
 
 namespace lidar_project{
 class CloudFilterInterface{

@@ -22,6 +22,10 @@
 #include "publisher/key_frame_publisher.hpp"
 #include "publisher/key_frames_publisher.hpp"
 
+// 回环位姿订阅
+#include "subscriber/loop_pose_subscriber.hpp"
+
+
 
 namespace lidar_project{
 class BackEndFlow{
@@ -36,22 +40,29 @@ class BackEndFlow{
         bool HasData();
         bool ValidData();
         bool UpdateBackEnd();
-        bool SaveTrajectory();
+        // bool SaveTrajectory();
         bool PublishData();
+
+        bool MaybeInsertLoopPose();//回环添加到后端
 
     private:
         std::shared_ptr<CloudSubscriber> cloud_sub_ptr_;
         std::shared_ptr<OdometrySubscriber> gnss_pose_sub_ptr_;
         std::shared_ptr<OdometrySubscriber> laser_odom_sub_ptr_;
 
+        std::shared_ptr<LoopPoseSubscriber> loop_pose_sub_ptr_;//回环新增
+
         std::shared_ptr<OdometryPublisher> transformed_odom_pub_ptr_;
         std::shared_ptr<KeyFramePublisher> key_frame_pub_ptr_;
         std::shared_ptr<KeyFramesPublisher> key_frames_pub_ptr_;
         std::shared_ptr<BackEnd> back_end_ptr_;
 
+        std::shared_ptr<KeyFramePublisher> key_gnss_pub_ptr_;//回环新增
+
         std::deque<CloudData> cloud_data_buff_;
         std::deque<PoseData,Eigen::aligned_allocator<PoseData>> gnss_pose_data_buff_;//Eigen内存对齐与std标准容器
         std::deque<PoseData,Eigen::aligned_allocator<PoseData>> laser_odom_data_buff_;
+        std::deque<LoopPose> loop_pose_data_buff_;
 
         PoseData current_gnss_pose_data_;
         PoseData current_laser_pose_data_;

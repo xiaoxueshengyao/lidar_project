@@ -14,6 +14,8 @@
 #include "kitti_data/pose_data.hpp"
 #include "kitti_data/key_frame.hpp"
 
+#include "kitti_data/loop_pose.hpp"
+
 #include <string>
 #include <deque>
 #include <yaml-cpp/yaml.h>
@@ -27,12 +29,14 @@ class BackEnd{
         BackEnd();
 
         bool ForceOptimize();//强制更新
-        
+        bool InsertLoopPose(const LoopPose& loop_pose);
+
         bool Updata(const CloudData& cloud_data, const PoseData& laser_odom, const PoseData& gnss_pose);//更新位姿
         void GetOptimizedKeyFrames(std::deque<KeyFrame>& key_frames_deque);
         bool HasNewKeyFrame();
         bool HasNewOptimized();
         void GetLatestKeyFrame(KeyFrame& key_frame);
+        void GetLatestKeyGNSS(KeyFrame& key_frame);//回环新增，获取关键帧对应gnss数据
 
     private:
         bool InitWithConfig();                                      //关键帧、优化等参数选择
@@ -42,11 +46,16 @@ class BackEnd{
         bool InitGraphOptimizer(const YAML::Node& config_node);     //后端优化参数读取
 
         void ResetParam();
-        bool SaveTrajectory(const PoseData& laser_odom, const PoseData& gnss_pose);
-        bool MaybeNewKeyFrame(const CloudData& cloud_data, const PoseData& laser_odom);
+        // bool SaveTrajectory(const PoseData& laser_odom, const PoseData& gnss_pose);//回环去掉
+        bool MaybeNewKeyFrame(const CloudData& cloud_data, const PoseData& laser_odom, const PoseData& gnss_data);//回环添加gnss
         bool MaybeOptimized();
 
         bool AddNodeAndEdge(const PoseData& gnss_data);//添加节点和边
+
+        //回环新增函数
+        bool SavePose(std::ofstream& ofs, const Eigen::Matrix4f& pose);
+        bool SaveOptimizedPose();
+
 
     private:
         std::string key_frames_path_ = "" ;
@@ -54,6 +63,7 @@ class BackEnd{
         
         std::ofstream ground_truth_ofs_;
         std::ofstream laser_odom_ofs_;
+        std::ofstream optimized_pose_ofs_;//回环新增
 
         float key_frame_distance_ = 2.0;
         // int optimize_step_with_none_ = 100;             
@@ -67,9 +77,11 @@ class BackEnd{
         // KeyFrame latest_key_frame_;
         KeyFrame current_key_frame_;
         std::deque<KeyFrame> key_frames_deque_;
+        KeyFrame current_key_gnss_;
+        std::deque<Eigen::Matrix4f> optimized_pose_;
 
 
-        //优化相关
+        //优化相关,优化器
         std::shared_ptr<InterfaceGraphOptimizer> graph_optimizer_ptr_;
         //嵌套类，私有，可以直接访问外围类的静态成员、类型名、枚举值
         class GraphOptimizerConfig{

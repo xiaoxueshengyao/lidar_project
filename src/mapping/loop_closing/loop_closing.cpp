@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <pcl/common/transforms.h>
 #include <pcl/io/pcd_io.h>
+#include "glog/logging.h"
 
 #include "general_models/registration/ndt_registration.hpp"
 #include "general_models/cloud_filter/voxel_filter.hpp"
@@ -28,6 +29,7 @@ LoopClosing::LoopClosing(){
 //使用yaml初始化各类参数
 bool LoopClosing::InitWithConfig(){
     std::string config_file_path = WORK_SPACE_PATH + "/config/LoopClosingConfig.yaml";
+    std::cout<<"回环读取的路径:"<<config_file_path<<std::endl;
     YAML::Node config_node = YAML::LoadFile(config_file_path);
 
     std::cout<<">>>>>>>>>>>闭环检测初始化<<<<<<<<<<<<<"<<std::endl;
@@ -89,7 +91,7 @@ bool LoopClosing::InitFilter(std::string filter_user, std::shared_ptr<CloudFilte
 
     if(filter_method == "voxel_filter"){
         filter_ptr = std::make_shared<VoxelFilter>(config_node[filter_method][filter_user]);
-    }else if(filter_method == "np_filter"){
+    }else if(filter_method == "no_filter"){
         filter_ptr = std::make_shared<NoFilter>();
     }else{
         LOG(ERROR) << "没有为 "<<filter_user<<" 找到与"<<filter_method<<" 相对应的滤波方法";
@@ -112,8 +114,13 @@ bool LoopClosing::Update(const KeyFrame key_frame, const KeyFrame key_gnss){
     all_key_gnss_.push_back(key_gnss);
 
     int key_frame_index = 0;
-    if(!DetectNearestKeyFrame(key_frame_index))
+    if(!DetectNearestKeyFrame(key_frame_index)){
+        // std::cout<<"未找到符合规则的回环"<<std::endl;
         return false;
+    }else{
+        std::cout<<"找到回环啦，我要更新位姿去了"<<std::endl;
+    }
+        
     if(!CloudRegistration(key_frame_index))
         return false;
     
@@ -127,6 +134,7 @@ bool LoopClosing::Update(const KeyFrame key_frame, const KeyFrame key_gnss){
  * OUTPUT:找到的回环历史帧的索引
  * ***/
 bool LoopClosing::DetectNearestKeyFrame(int& key_frame_index){
+    
     static int skip_cnt = 0;
     static int skip_num = loop_step_;
 
@@ -136,10 +144,10 @@ bool LoopClosing::DetectNearestKeyFrame(int& key_frame_index){
     if((int)all_key_gnss_.size() < diff_num_ + 1)
         return false;//关键帧数目太少时，不进行检测
 
-
+    std::cout<<">>>>>>>>>>>>>>>寻找回环<<<<<<<<<<<<<<<<<"<<std::endl;
     int key_num = (int)all_key_gnss_.size();
     float min_distance = 1000000.0;
-    float distance = 0;//判断计算
+    float distance = 0.0;//判断计算
 
     KeyFrame history_key_frame;
     KeyFrame current_key_frame = all_key_gnss_.back();//从最近的关键帧拿出来去和历史匹配
@@ -174,6 +182,7 @@ bool LoopClosing::DetectNearestKeyFrame(int& key_frame_index){
         skip_num = loop_step_;
         return true;
     }
+    
 }
 
 
@@ -193,6 +202,7 @@ bool LoopClosing::CloudRegistration(int key_frame_index){
     //进行匹配
     Eigen::Matrix4f result_pose = Eigen::Matrix4f::Identity();
     Registration(map_cloud_ptr,scan_cloud_ptr,scan_pose,result_pose);
+    std::cout<<"回环小地图与当前帧地图匹配完毕"<<std::endl;
 
     //计算相对位姿
     current_loop_pose_.pose = map_pose.inverse() *  result_pose;

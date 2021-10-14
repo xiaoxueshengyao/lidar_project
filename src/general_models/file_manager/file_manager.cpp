@@ -12,9 +12,13 @@
 namespace lidar_project{
 //打开文件
 bool FileManager::CreateFile(std::ofstream& ofs, std::string file_path){
+    ofs.close();
+    boost::filesystem::remove(file_path.c_str());
+
+
     ofs.open(file_path.c_str(),std::ios::app);
     if(!ofs){
-        LOG(WARNING)<<"No File "<<file_path;
+        LOG(WARNING)<<"No File "<<file_path<<std::endl;
         return false;
     }
 
@@ -28,7 +32,7 @@ bool FileManager::InitDirectory(std::string directory_path, std::string use_for)
         boost::filesystem::remove_all(directory_path+"/tail");//递归删除整个目录结构
         LOG(INFO) << use_for <<" 存放地址: "<<std::endl<<directory_path<<std::endl<<std::endl;
 
-        return true;
+        // return true;
     }
 
     return CreateDirectory(directory_path,use_for);

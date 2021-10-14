@@ -77,9 +77,10 @@ include_directories( "/usr/include/eigen3" )
 include_directories(include ${catkin_INCLUDE_DIRS})
 
 #工作空间设定
+set(WORK_SPACE_PATH ${PROJECT_SOURCE_DIR})
 configure_file(
   ${PROJECT_SOURCE_DIR}/include/general_models/tools/global_path.h.in
-  ${PROJECT_SOURCE_DIR}/include/general_models/tools/global_path.h
+  ${PROJECT_BINARY_DIR}/include/general_models/tools/global_path.h
 )
 include_directories(${PROJECT_BINARY_DIR}/include)
 
@@ -108,7 +109,7 @@ list(REMOVE_ITEM ALL_SRCS ${APP_SRCS})
 #add_executable(front_end app/front_test.cpp src/kitti_data.cpp src/tf_listener.cpp src/front_end_back.cpp)
 #target_link_libraries(front_end ${catkin_LIBRARIES} 
 #${PCL_LIBRARIES} ${Eigen_LIBRA/home/jingwan/lslidar_ws/src
-add_executable(test_frame_node app/test_frame.cpp ${ALL_SRCS})
+add_executable(test_frame_node app/test_frame.cpp ${ALL_SRCS})  
 target_link_libraries(test_frame_node ${catkin_LIBRARIES} ${ALL_TARGET_LIBRARIES} glog)
 
 #数据预处理节点
