@@ -20,10 +20,14 @@ int main(int argc, char** argv){
     ros::init(argc,argv,"front_end_node");
     ros::NodeHandle nh;
 
+    std::string cloud_topic,odom_topic;
+    nh.param<std::string>("cloud_topic",cloud_topic,"/synced_cloud");
+    nh.param<std::string>("odom_topic",odom_topic,"/laser_odom");
+
     //ros::ServiceServer service = nh.advertiseService("save_map",save_map_callback);
     //_front_end_flow_ptr = std::make_shared<FrontEndFlow>(nh);
     //std::shared_ptr<FrontEndFlow> front_end_flow_ptr = std::allocate_shared<FrontEndFlow>(Eigen::aligned_allocator<FrontEndFlow>(nh));//前端流程对象
-    std::shared_ptr<FrontEndFlow>  front_end_flow_ptr = std::shared_ptr<FrontEndFlow>(new FrontEndFlow(nh));//前端流程对象
+    std::shared_ptr<FrontEndFlow>  front_end_flow_ptr = std::shared_ptr<FrontEndFlow>(new FrontEndFlow(nh,cloud_topic,odom_topic));//前端流程对象
 
     ros::Rate rate(100);
     while (ros::ok())

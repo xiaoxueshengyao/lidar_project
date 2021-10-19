@@ -30,7 +30,8 @@
 namespace lidar_project{
 class BackEndFlow{
     public:
-        BackEndFlow(ros::NodeHandle& nh);
+        // BackEndFlow(ros::NodeHandle& nh);
+        BackEndFlow(ros::NodeHandle& nh, std::string cloud_topic, std::string odom_topic);
         bool Run();
 
         bool ForceOptimize();//调用优化
@@ -53,6 +54,7 @@ class BackEndFlow{
         std::shared_ptr<LoopPoseSubscriber> loop_pose_sub_ptr_;//回环新增
 
         std::shared_ptr<OdometryPublisher> transformed_odom_pub_ptr_;
+        
         std::shared_ptr<KeyFramePublisher> key_frame_pub_ptr_;
         std::shared_ptr<KeyFramesPublisher> key_frames_pub_ptr_;
         std::shared_ptr<BackEnd> back_end_ptr_;

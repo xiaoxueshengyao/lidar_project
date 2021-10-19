@@ -8,6 +8,7 @@
 #include <lidar_project/saveMap.h>         //ros的服务头文件，不用写出实体，在cmakelists.txt中写出可在build自动生成
 
 #include "mapping/viewer/viewer_flow.hpp"
+#include "general_models/tools/global_path.h"
 
 using namespace lidar_project;
 
@@ -23,15 +24,19 @@ bool save_map_callback(saveMap::Request& request, saveMap::Response& response){
 
 int main(int argc, char** argv){
     google::InitGoogleLogging(argv[0]);//谷歌的日志文件，日志名
-    FLAGS_log_dir = "/home/jingwan/lslidar_ws/src/lidar_project/Log";//记录日志的同时输出到stderr
+    FLAGS_log_dir = WORK_SPACE_PATH + "/Log";//记录日志的同时输出到stderr
     FLAGS_alsologtostderr = 1;//Set whether log messages go to stderr in addition to logfiles.
 
     ros::init(argc,argv,"viewer_node");
     ros::NodeHandle nh;
 
+    std::string cloud_topic;
+    nh.param<std::string>("cloud_topic",cloud_topic,"/synced_cloud");
+    std::shared_ptr<ViewerFlow> _viewer_flow_ptr = std::shared_ptr<ViewerFlow>(new ViewerFlow(nh,cloud_topic));
+
     ros::ServiceServer service = nh.advertiseService("save_map",save_map_callback);//订阅服务
     // std::shared_ptr<ViewerFlow> _viewer_flow_ptr = std::make_shared<ViewerFlow>(nh);
-    std::shared_ptr<ViewerFlow> _viewer_flow_ptr = std::shared_ptr<ViewerFlow>(new ViewerFlow(nh));
+    
 
     ros::Rate rate(100); //频率100Hz
     while(ros::ok()){

@@ -1,0 +1,6 @@
+Log file created at: 2021/10/19 10:26:48
+Running on machine: jingwan
+Running duration (h:mm:ss): 0:00:00
+Log line format: [IWEF]yyyymmdd hh:mm:ss.uuuuuu threadid file:line] msg
+I20211019 10:26:48.097657  1898 ndt_registration.cpp:28] NDT parameters: 
+resolution: 1, step size: 0.1, transformation epsilon0.01, 

@@ -5,6 +5,8 @@
  * Input : 前段里程计位姿 + GNSS组合导航位姿 +　闭环检测相对位姿
  * Output: 优化后的位姿
  * Data:0610
+ * 
+ * 1018 前端使用aloam，对应话题需要更改，从构造函数入手
  * ***/
 
 
@@ -18,12 +20,15 @@
 namespace lidar_project{
 
 //构造函数，初始化私有变量
-BackEndFlow::BackEndFlow(ros::NodeHandle& nh){
-    cloud_sub_ptr_ = std::make_shared<CloudSubscriber>(nh,"/synced_cloud",100000);
+// BackEndFlow::BackEndFlow(ros::NodeHandle& nh){
+BackEndFlow::BackEndFlow(ros::NodeHandle& nh, std::string cloud_topic, std::string odom_topic){
+    // cloud_sub_ptr_ = std::make_shared<CloudSubscriber>(nh,"/synced_cloud",100000);
+    cloud_sub_ptr_ = std::make_shared<CloudSubscriber>(nh,cloud_topic,100000);
     // gnss_pose_sub_ptr_ = std::make_shared<OdometrySubscriber>(nh,"synced_gnss",100000);
     // laser_odom_sub_ptr_ = std::make_shared<OdometrySubscriber>(nh,"laser_odom",100000);
     gnss_pose_sub_ptr_ = std::shared_ptr<OdometrySubscriber>(new OdometrySubscriber(nh,"/synced_gnss",100000));
-    laser_odom_sub_ptr_ = std::shared_ptr<OdometrySubscriber>(new OdometrySubscriber(nh,"/laser_odom",100000));
+    // laser_odom_sub_ptr_ = std::shared_ptr<OdometrySubscriber>(new OdometrySubscriber(nh,"/laser_odom",100000));
+    laser_odom_sub_ptr_ = std::shared_ptr<OdometrySubscriber>(new OdometrySubscriber(nh,odom_topic,100000));
     loop_pose_sub_ptr_ = std::make_shared<LoopPoseSubscriber>(nh,"/loop_pose",100000);//回环数据订阅指针
 
     //发布优化后的位姿

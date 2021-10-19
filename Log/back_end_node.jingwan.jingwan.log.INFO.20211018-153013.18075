@@ -1,0 +1,17 @@
+Log file created at: 2021/10/18 15:30:13
+Running on machine: jingwan
+Running duration (h:mm:ss): 0:00:00
+Log line format: [IWEF]yyyymmdd hh:mm:ss.uuuuuu threadid file:line] msg
+I20211018 15:30:13.999336 18075 file_manager.cpp:33] 关键帧点云 存放地址: 
+/home/jingwan/lslidar_ws/src/lidar_project/slam_data/key_frames
+
+I20211018 15:30:13.999612 18075 file_manager.cpp:65] 存放地址：
+/home/jingwan/lslidar_ws/src/lidar_project/slam_data/key_frames
+
+I20211018 15:30:13.999630 18075 file_manager.cpp:33] 轨迹文件 存放地址: 
+/home/jingwan/lslidar_ws/src/lidar_project/slam_data/trajectory
+
+I20211018 15:30:13.999639 18075 file_manager.cpp:65] 存放地址：
+/home/jingwan/lslidar_ws/src/lidar_project/slam_data/trajectory
+
+I20211018 15:30:14.008111 18075 back_end.cpp:56] 后端优化悬则的优化器为：　g2o

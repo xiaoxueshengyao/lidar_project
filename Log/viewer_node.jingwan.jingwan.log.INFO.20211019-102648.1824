@@ -1,0 +1,13 @@
+Log file created at: 2021/10/19 10:26:48
+Running on machine: jingwan
+Running duration (h:mm:ss): 0:00:00
+Log line format: [IWEF]yyyymmdd hh:mm:ss.uuuuuu threadid file:line] msg
+I20211019 10:26:48.082803  1824 file_manager.cpp:33] PointCloud Map 存放地址: 
+/home/jingwan/lslidar_ws/src/lidar_project/slam_data/map
+
+I20211019 10:26:48.083038  1824 file_manager.cpp:65] 存放地址：
+/home/jingwan/lslidar_ws/src/lidar_project/slam_data/map
+
+I20211019 10:26:48.083056  1824 viewer.cpp:64] Viewer_frameThe chosen filter method is: voxel_filter
+I20211019 10:26:48.083134  1824 viewer.cpp:64] Viewer_local_mapThe chosen filter method is: voxel_filter
+I20211019 10:26:48.083168  1824 viewer.cpp:64] Viewer_global_mapThe chosen filter method is: voxel_filter

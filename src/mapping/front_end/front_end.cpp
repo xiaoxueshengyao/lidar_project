@@ -13,6 +13,7 @@
 #include <boost/filesystem.hpp>
 #include <pcl/io/pcd_io.h>
 #include <glog/logging.h>
+#include "general_models/tools/global_path.h"
 
 
 namespace lidar_project{
@@ -26,7 +27,7 @@ FrontEnd::FrontEnd()
 }
 
 bool FrontEnd::InitWithConfig(){
-    std::string config_file_path = "/home/jingwan/lslidar_ws/src/lidar_project/config/FrontEndConfig.yaml";
+    std::string config_file_path = WORK_SPACE_PATH + "/config/FrontEndConfig.yaml";
     YAML::Node config_node = YAML::LoadFile(config_file_path);
 
     InitParam(config_node);

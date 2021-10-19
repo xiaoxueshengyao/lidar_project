@@ -16,7 +16,7 @@
 
 namespace lidar_project
 {
-DataPretreatFlow::DataPretreatFlow(ros::NodeHandle& nh){
+DataPretreatFlow::DataPretreatFlow(ros::NodeHandle& nh,std::string cloud_topic){
     //数据订阅
     // cloud_sub_ptr_ = std::make_shared<CloudSubscriber>(nh,"/kitti/velo/pointcloud",100000);
     // imu_sub_ptr_ = std::make_shared<IMUSubscriber>(nh,"/kitti/oxts/imu",100000);
@@ -33,7 +33,8 @@ DataPretreatFlow::DataPretreatFlow(ros::NodeHandle& nh){
     //数据发布
     // cloud_pub_ptr_ = std::make_shared<CloudPublisher>(nh,"/synced_cloud","/velo_link",100);
     // gnss_pub_ptr_ = std::make_shared<OdometryPublisher>(nh,"/synced_gnss","map","/velo_link",100);
-    cloud_pub_ptr_ = std::shared_ptr<CloudPublisher>(new CloudPublisher(nh,"/synced_cloud","/velo_link",100));
+    // cloud_pub_ptr_ = std::shared_ptr<CloudPublisher>(new CloudPublisher(nh,"/synced_cloud","/velo_link",100));
+    cloud_pub_ptr_ = std::shared_ptr<CloudPublisher>(new CloudPublisher(nh,cloud_topic,"/velo_link",100));
     gnss_pub_ptr_ = std::shared_ptr<OdometryPublisher>(new OdometryPublisher(nh,"/synced_gnss","map","/velo_link",100));
     //畸变矫正
     // distortion_adjust_ptr_ = std::make_shared<DistortionAdjust>();

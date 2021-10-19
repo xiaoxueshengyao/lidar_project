@@ -126,12 +126,12 @@ target_link_libraries(front_end_node ${catkin_LIBRARIES} ${ALL_TARGET_LIBRARIES}
 
 #后端节点
 add_executable(back_end_node app/back_end_node.cpp ${ALL_SRCS})
-add_dependencies(back_end_node ${catkin_EXPORTED_TARGETS} optimizeMap_gencpp)
+add_dependencies(back_end_node ${catkin_EXPORTED_TARGETS} ${PROJECT_NAME}_gencpp)
 target_link_libraries(back_end_node ${catkin_LIBRARIES} ${ALL_TARGET_LIBRARIES} glog)
 
 #可视化节点
 add_executable(viewer_node app/viewer_node.cpp ${ALL_SRCS})
-add_dependencies(viewer_node ${catkin_EXPORTED_TARGETS} saveMap_gencpp)
+add_dependencies(viewer_node ${catkin_EXPORTED_TARGETS} ${PROJECT_NAME}_gencpp)
 target_link_libraries(viewer_node ${catkin_LIBRARIES} ${ALL_TARGET_LIBRARIES} glog)
 
 #回环节点

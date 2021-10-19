@@ -21,7 +21,8 @@
 namespace lidar_project{
 class FrontEndFlow{
     public:
-      FrontEndFlow(ros::NodeHandle& nh);
+      // FrontEndFlow(ros::NodeHandle& nh);
+      FrontEndFlow(ros::NodeHandle& nh, std::string cloud_topic, std::string odom_topic);//使用aloam前端，从这里改变接口
 
       bool Run();//所有流程在这
 

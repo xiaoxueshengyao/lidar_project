@@ -24,7 +24,8 @@ namespace lidar_project
 {
 class ViewerFlow{
     public:
-        ViewerFlow(ros::NodeHandle& nh);
+        // ViewerFlow(ros::NodeHandle& nh);
+        ViewerFlow(ros::NodeHandle& nh, std::string cloud_topic);
 
         bool Run();
         bool SaveMap();

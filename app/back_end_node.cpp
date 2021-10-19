@@ -11,6 +11,7 @@
 #include "glog/logging.h"
 
 #include "lidar_project/optimizeMap.h"
+#include "general_models/tools/global_path.h"
 using namespace lidar_project;
 
 std::shared_ptr<BackEndFlow> _back_end_flow_ptr;
@@ -24,15 +25,20 @@ bool optimize_map_callback(optimizeMap::Request& request, optimizeMap::Response&
 
 int main(int argc, char** argv){
     google::InitGoogleLogging(argv[0]);
-    FLAGS_log_dir = "/home/jingwan/lslidar_ws/src/lidar_project/Log";
+    FLAGS_log_dir = WORK_SPACE_PATH +"/Log";
     FLAGS_alsologtostderr = 1;//记录日志的同时输出到stderr
 
     
     ros::init(argc,argv,"back_end_node");
     ros::NodeHandle nh;
 
+    //配合aloam前端,从launch文件中获取的
+    std::string cloud_topic, odom_topic;
+    nh.param<std::string>("cloud_topic",cloud_topic,"/synced_cloud");
+    nh.param<std::string>("odom_topic",odom_topic,"/laser_odom");
+
     ros::ServiceServer service = nh.advertiseService("optimize_map",optimize_map_callback);
-    _back_end_flow_ptr = std::shared_ptr<BackEndFlow>(new BackEndFlow(nh));
+    _back_end_flow_ptr = std::shared_ptr<BackEndFlow>(new BackEndFlow(nh,cloud_topic,odom_topic));
 
     //创建后端流程管理指针
     // std::shared_ptr<BackEndFlow> back_end_flow_ptr = std::make_shared<BackEndFlow>(nh);

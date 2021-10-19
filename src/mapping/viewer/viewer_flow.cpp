@@ -9,9 +9,10 @@
 namespace lidar_project
 {
 //构造函数，各个指针的初始化
-ViewerFlow::ViewerFlow(ros::NodeHandle& nh){
+ViewerFlow::ViewerFlow(ros::NodeHandle& nh, std::string  cloud_topic){
     //数据订阅
-    cloud_sub_ptr_ = std::make_shared<CloudSubscriber>(nh,"/synced_cloud",100000);
+    // cloud_sub_ptr_ = std::make_shared<CloudSubscriber>(nh,"/synced_cloud",100000);
+    cloud_sub_ptr_ = std::make_shared<CloudSubscriber>(nh,cloud_topic,100000);
     key_frame_sub_ptr_ = std::make_shared<KeyFrameSubscriber>(nh,"/key_frame",100000);//多了个s成另外一个变量了
     transformed_odom_sub_ptr_ = std::make_shared<OdometrySubscriber>(nh,"/transformed_odom",100000);
     optimized_key_frames_sub_ptr_ = std::make_shared<KeyFramesSubscriber>(nh,"/optimized_key_frames",100000);
