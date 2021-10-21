@@ -26,6 +26,10 @@ bool VoxelFilter::SetFilterParam(float leaf_size_x,float leaf_size_y,float leaf_
     return true;
 }
 
+/****
+ * INPUT: input_cloud_ptr  输入点云
+ * OUTPUT: fltered_cloud_ptr 滤波后点云
+ * ****/
 bool VoxelFilter::Filter(CloudData::CloudPtr& input_cloud_ptr,CloudData::CloudPtr& filtered_cloud_ptr){
     voxel_filter_.setInputCloud(input_cloud_ptr);
     voxel_filter_.filter(*filtered_cloud_ptr);

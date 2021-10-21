@@ -74,7 +74,8 @@
         "mutex": "cpp",
         "core": "cpp",
         "numericaldiff": "cpp",
-        "*.in": "cpp"
+        "*.in": "cpp",
+        "*.ipp": "cpp"
     },
     "python.analysis.extraPaths": [
         "/home/jingwan/lslidar_ws/devel/lib/python2.7/dist-packages",

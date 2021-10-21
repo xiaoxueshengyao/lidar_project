@@ -23,6 +23,7 @@ class CloudSubscriber{
     void ParaData( std::deque<CloudData>& deque_cloud_data);
 
   private:
+    /***点云订阅回调函数***/
     void msg_callback(const sensor_msgs::PointCloud2::ConstPtr& cloud_msg_ptr);
 
   private:

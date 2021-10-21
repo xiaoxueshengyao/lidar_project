@@ -17,6 +17,7 @@ void CloudSubscriber::msg_callback(const sensor_msgs::PointCloud2::ConstPtr& clo
     new_cloud_data_.push_back(cloud_buff);
 }
 
+/***数据存储，把订阅的点云数据放到deque中***/
 void CloudSubscriber::ParaData(std::deque<CloudData>& deque_cloud_data){
     if(new_cloud_data_.size()>0){
         deque_cloud_data.insert(deque_cloud_data.end(),new_cloud_data_.begin(),new_cloud_data_.end());
