@@ -17,7 +17,7 @@ NoFilter::NoFilter(){
  * Input::input_cloud_ptr
  * Output: filtered_cloud_ptr
  * ***/
-bool NoFilter::Filter(CloudData::CloudPtr& input_cloud_ptr,CloudData::CloudPtr& filtered_cloud_ptr){
+bool NoFilter::Filter(const CloudData::CloudPtr& input_cloud_ptr,CloudData::CloudPtr& filtered_cloud_ptr){
     filtered_cloud_ptr.reset(new CloudData::CloudPointT(*input_cloud_ptr));
     return true;
 }

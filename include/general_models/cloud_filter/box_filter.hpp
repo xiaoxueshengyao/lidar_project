@@ -9,15 +9,15 @@
 #include <pcl/filters/crop_box.h>
 #include "general_models/cloud_filter/filter_interface.hpp"
 
-namespace lidar_locallization{
+namespace lidar_project{
 class BoxFilter : public CloudFilterInterface{
     public:
-        BoxFilter(YAML:Node node);
+        BoxFilter(YAML::Node node);
         BoxFilter() = default;
 
-        bool Filter(const CLoudData::CloudPtr& input_cloud_ptr, CloudData::CloudPtr& filtered_cloud_ptr) override;
+        bool Filter(const CloudData::CloudPtr& input_cloud_ptr, CloudData::CloudPtr& filtered_cloud_ptr) override;
 
-        void SetSize(sd::vector<float> size);
+        void SetSize(std::vector<float> size);
         void SetOrigin(std::vector<float> origin);
         std::vector<float> GetEdge();
 
@@ -25,7 +25,7 @@ class BoxFilter : public CloudFilterInterface{
         void CalculateEdge();
 
     private:
-        pcl::CropBox<CloudData::CloudPointT> pcl_box_filter_;
+        pcl::CropBox<CloudData::PointT> pcl_box_filter_;//放的是xyz
 
         std::vector<float> origin_;
         std::vector<float> size_;

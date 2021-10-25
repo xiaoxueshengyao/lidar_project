@@ -5,7 +5,7 @@ set(CMAKE_BUILD_TYPE "Debug")
 set(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
 add_compile_options(-std=c++11)
 add_definitions(-std=c++11)
-# set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_FLAGS "-std=c++11")
 
 
 find_package(catkin REQUIRED COMPONENTS
@@ -138,3 +138,7 @@ target_link_libraries(viewer_node ${catkin_LIBRARIES} ${ALL_TARGET_LIBRARIES} gl
 add_executable(loop_closing_node app/loop_closing_node.cpp ${ALL_SRCS})
 add_dependencies(loop_closing_node ${catkin_EXPORTED_TARGETS} )
 target_link_libraries(loop_closing_node ${catkin_LIBRARIES} ${ALL_TARGET_LIBRARIES} glog)
+
+add_executable(matching_node app/matching_node.cpp ${ALL_SRCS})
+add_dependencies(matching_node ${catkin_EXPORTED_TARGETS})
+target_link_libraries(matching_node ${catkin_LIBRARIES} ${ALL_TARGET_LIBRARIES} glog)

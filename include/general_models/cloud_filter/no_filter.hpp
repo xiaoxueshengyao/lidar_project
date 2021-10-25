@@ -13,7 +13,7 @@ class NoFilter : public CloudFilterInterface{
     public:
         NoFilter();
 
-        bool Filter(CloudData::CloudPtr& input_cloud_ptr,CloudData::CloudPtr& filtered_cloud_ptr) override;//重载滤波函数
+        bool Filter(const CloudData::CloudPtr& input_cloud_ptr,CloudData::CloudPtr& filtered_cloud_ptr) override;//重载滤波函数
 };
 
 }

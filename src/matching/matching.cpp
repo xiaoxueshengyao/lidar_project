@@ -98,14 +98,14 @@ bool Matching::InitGlobalMap(){
 bool Matching::ResetLocalMap(float x, float y, float z){
     std::vector<float> origin = {x, y, z};
     box_filter_ptr_->SetOrigin(origin);
-    box_filter_ptr_->Filter(global_map_ptr_, local_map_filter_ptr_);
+    box_filter_ptr_->Filter(global_map_ptr_, local_map_ptr_);//取全局地图的一部分
 
     registration_ptr_->SetInputTarget(local_map_ptr_);
 
     has_new_local_map_ = true;
     std::vector<float> edge = box_filter_ptr_->GetEdge();
     LOG(INFO) << "new local map: "<< edge.at(0)<<","<<edge.at(1)<<","<<edge.at(2)<<","
-                                  << edge.at(3)<<","<<edge.at(4)<<","<<edge.at(5)<<std::ednl<<std::endl;
+                                  << edge.at(3)<<","<<edge.at(4)<<","<<edge.at(5)<<std::endl<<std::endl;
     return true;
 }
 
@@ -152,19 +152,19 @@ bool Matching::Update(const CloudData& cloud_data, Eigen::Matrix4f& cloud_pose){
 
 
 bool Matching::SetInitPose(const Eigen::Matrix4f& init_pose){
-    init_pose = init_pose;
+    init_pose_ = init_pose;
     ResetLocalMap(init_pose(0,3), init_pose(1,3), init_pose(2,3));
 
     return true;
 }
 
 //如果没有初始化，就用gnss的位姿进行初始化
-bool Matching::SetGNSSPose(const Eigen::Matrix4f& gnss_psoe){
+bool Matching::SetGNSSPose(const Eigen::Matrix4f& gnss_pose){
     current_gnss_pose_ = gnss_pose;
 
     static int gnss_cnt=0;
     if(gnss_cnt==0){
-        SetInitPose(gnss_psoe);
+        SetInitPose(gnss_pose);
     }else if(gnss_cnt > 3){
         has_inited_ =true;
     }

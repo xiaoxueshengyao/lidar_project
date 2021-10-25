@@ -13,7 +13,7 @@ MatchingFlow::MatchingFlow(ros::NodeHandle& nh){
     gnss_sub_ptr_ = std::make_shared<OdometrySubscriber>(nh,"/synced_gnss",100000);
 
     global_map_pub_ptr_ = std::make_shared<CloudPublisher>(nh,"/global_map","/map",100);
-    local_map_pub_ptr_ = std::make_shared<CloudPublisher>(nh."local_map","/map",100);
+    local_map_pub_ptr_ = std::make_shared<CloudPublisher>(nh,"/local_map","/map",100);
     current_scan_pub_ptr_ = std::make_shared<CloudPublisher>(nh,"/current_scan","/map",100);
     laser_odom_pub_ptr_ = std::make_shared<OdometryPublisher>(nh,"/laser_localization","/map","/lidar",100);
     laser_tf_pub_ptr_ = std::make_shared<TFBroadCaster>("/map","/vehicle_link");

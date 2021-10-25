@@ -1,0 +1,30 @@
+map_path: /home/jingwan/data/2011_10_03/map/map_loopclosing.pcd  #地图存放路径
+
+#配准方法
+registration_method: NDT
+
+#当前帧滤波方法选择
+frame_filter: voxel_filter
+
+#局部地图参数,[min_x, max_x,min_y,max_y, min_z, max_z]
+box_filter_size: [-150.0, 150.0, -150.0, 150.0, -150.0, 150.0]
+local_map_filter: voxel_filter 
+
+#全局地图滤波方法
+global_map_filter: voxel_filter
+
+#配准具体参数
+NDT:
+  res : 1.0
+  step_size : 0.1
+  trans_eps : 0.01
+  max_iter : 30
+
+#滤波参数
+voxel_filter:
+  global_map:
+    leaf_size: [0.9,0.9,0.9]
+  local_map:
+    leaf_size: [0.5,0.5,0.5]
+  frame:
+    leaf_size: [1.5,1.5,1.5]

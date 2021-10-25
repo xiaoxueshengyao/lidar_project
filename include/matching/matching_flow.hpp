@@ -47,7 +47,7 @@ class MatchingFlow{
         std::shared_ptr<Matching> matching_ptr_;
 
         std::deque<CloudData> cloud_data_buff_;
-        std::deque<PoseData> gnss_data_buff_;
+        std::deque<PoseData,Eigen::aligned_allocator<PoseData>> gnss_data_buff_;
 
         CloudData current_cloud_data_;
         PoseData current_gnss_data_;
