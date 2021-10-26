@@ -39,3 +39,7 @@ yaml如果源码安装，编译可能会出现问题，是因为ubuntu本身有y
 
 ![建图1_proc](https://user-images.githubusercontent.com/33504360/136660507-8017a669-e28c-4add-99f0-b702093ecc0b.jpg)
 ![建图2_proc](https://user-images.githubusercontent.com/33504360/136660515-9445e025-9d37-42d4-a431-55a4fa8ee6bf.jpg)
+
+5、建图后的定位
+建图完成后，使用pcd地图作为导航地图，为加快配准速度，使用当前帧和局部地图的scan_to_map作为定位的input和target，算法仍然采用NDT，定位过程如图
+![定位](https://user-images.githubusercontent.com/33504360/138859745-90152ceb-9982-4b15-8997-03ea576b229f.png)
