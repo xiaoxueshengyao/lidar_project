@@ -1,0 +1,12 @@
+Log file created at: 2021/10/26 10:28:29
+Running on machine: jingwan
+Running duration (h:mm:ss): 0:00:00
+Log line format: [IWEF]yyyymmdd hh:mm:ss.uuuuuu threadid file:line] msg
+I20211026 10:28:29.816293  4089 ndt_registration.cpp:28] NDT parameters: 
+resolution: 1, step size: 0.1, transformation epsilon0.01, 
+I20211026 10:29:07.737861  4089 matching.cpp:104] load global map size: 225433959
+I20211026 10:29:19.554000  4089 matching.cpp:107] filtered global map size: 1689409
+I20211026 10:29:19.680459  4089 matching.cpp:122] new local map: -150,150,-150,150,-150,150
+
+I20211026 10:31:30.813679  4089 matching.cpp:122] new local map: -149.312,150.688,-149.448,150.552,-149.214,150.786
+

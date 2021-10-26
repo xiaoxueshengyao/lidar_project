@@ -1,6 +1,6 @@
 map_path: /home/jingwan/data/2011_10_03/map/map_loopclosing.pcd  #地图存放路径
 
-#配准方法
+#配准方法，目前只有NDT
 registration_method: NDT
 
 #当前帧滤波方法选择
@@ -15,10 +15,10 @@ global_map_filter: voxel_filter
 
 #配准具体参数
 NDT:
-  res : 1.0
-  step_size : 0.1
-  trans_eps : 0.01
-  max_iter : 30
+  res: 1.0
+  step_size: 0.1
+  trans_eps: 0.01
+  max_iteration: 30
 
 #滤波参数
 voxel_filter:

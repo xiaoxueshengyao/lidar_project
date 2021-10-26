@@ -24,7 +24,7 @@ Matching::Matching()
 
 //初始化各种参数，从yaml文件中读取
 bool Matching::InitWithConfig(){
-    std::string config_file_path = WORK_SPACE_PATH + "config/Matching.yaml";
+    std::string config_file_path = WORK_SPACE_PATH + "/config/Matching.yaml";
     YAML::Node config_node = YAML::LoadFile(config_file_path);
 
     std::cout<<">>>>>>>>>>>>>>>>>>地图初始化<<<<<<<<<<<<<<<<<"<<std::endl<<std::endl;
@@ -50,7 +50,7 @@ bool Matching::InitRegistration(std::shared_ptr<RegistrationInterface>& registra
     std::cout<<"地图匹配选择的点云匹配方式:"<<registration_method<<std::endl;
 
     if(registration_method == "NDT"){
-        registration_ptr_ = std::make_shared<NDTRegistration>(config_node[registration_method]);
+        registration_ptr = std::make_shared<NDTRegistration>(config_node[registration_method]);//多了下划线，函数给的变量直接变成了类的成员变量，出现bug
     }else{
         LOG(ERROR)<<"未找到与 "<<registration_method<<" 相匹配的配准方法";
         return false;
@@ -59,7 +59,9 @@ bool Matching::InitRegistration(std::shared_ptr<RegistrationInterface>& registra
     return true;
 }
 
-
+/****
+* 初始化滤波器类型
+****/
 bool Matching::InitFilter(std::string filter_user, std::shared_ptr<CloudFilterInterface>& filter_ptr,const YAML::Node& config_node){
     std::string filter_method = config_node[filter_user+"_filter"].as<std::string>();
     std::cout<<"地图匹配"<<filter_user<<"选择的滤波的方法为: "<<filter_method <<std::endl;
